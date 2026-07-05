@@ -5,7 +5,23 @@ import {
   CheckCircle2, XCircle, Server, Cpu, HardDrive, Wifi, DollarSign, Coins,
   Landmark, UserCheck, UserPlus, ShieldAlert, Zap, Activity, DatabaseBackup,
 } from "lucide-react";
+import {
+  AreaChart, Area, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid,
+  ResponsiveContainer, Tooltip, PieChart, Pie, Cell,
+} from "recharts";
 import { AdminShell, Card } from "@/components/admin-shell";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Pine — Broker Admin Dashboard" },
+      { name: "description", content: "Pine broker admin: executive overview, users, KYC, trading, wallets, ledger, compliance, and system operations." },
+      { property: "og:title", content: "Pine — Broker Admin Dashboard" },
+      { property: "og:description", content: "Executive control tower for brokerage operations." },
+    ],
+  }),
+  component: Dashboard,
+});
 
 const volumeData = Array.from({ length: 24 }, (_, i) => ({
   h: `${String(i).padStart(2, "0")}:00`,
@@ -53,172 +69,24 @@ const health = [
 ];
 
 function Dashboard() {
-  const [open, setOpen] = useState<Record<string, boolean>>({ "User Management": true });
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      <Sidebar open={open} setOpen={setOpen} />
-      <main className="flex-1 min-w-0">
-        <Topbar />
-        <div className="px-8 pb-10 space-y-6">
-          <PageHeader />
-          <KpiGrid />
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-            <VolumeCard />
-            <SystemHealthCard />
-          </div>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-            <RevenueCard />
-            <AllocationCard />
-          </div>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-            <ApprovalsCard />
-            <AlertsCard />
-          </div>
-          <OperationsStrip />
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function Sidebar({
-  open,
-  setOpen,
-}: {
-  open: Record<string, boolean>;
-  setOpen: (v: Record<string, boolean>) => void;
-}) {
-  return (
-    <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border">
-      <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
-        <div className="w-9 h-9 rounded-lg bg-pine-soft/20 flex items-center justify-center">
-          <Trees className="w-5 h-5 text-pine-soft" />
-        </div>
-        <div>
-          <div className="font-bold text-[15px] leading-tight text-white">Pine</div>
-          <div className="text-[10px] tracking-[0.15em] opacity-70">BROKER ADMIN</div>
-        </div>
+    <AdminShell activeLabel="Executive Dashboard" eyebrow="Control Tower" title="Executive Dashboard">
+      <PageHeader />
+      <KpiGrid />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <VolumeCard />
+        <SystemHealthCard />
       </div>
-      <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
-        {sectionOrder.map((section) => {
-          const items = nav.filter((n) => n.section === section);
-          if (!items.length) return null;
-          return (
-            <div key={section}>
-              <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-[0.15em] opacity-60">
-                {section}
-              </div>
-              <ul className="space-y-0.5">
-                {items.map((item) => (
-                  <NavItem
-                    key={item.label}
-                    item={item}
-                    isOpen={!!open[item.label]}
-                    onToggle={() => setOpen({ ...open, [item.label]: !open[item.label] })}
-                  />
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-      </nav>
-      <div className="p-3 border-t border-sidebar-border">
-        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sidebar-accent">
-          <div className="w-9 h-9 rounded-full bg-pine-soft/30 flex items-center justify-center">
-            <CircleUser className="w-5 h-5 text-white" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-medium text-white truncate">Muhammad Irfan</div>
-            <div className="text-[11px] opacity-70 truncate">Super Admin</div>
-          </div>
-          <ChevronDown className="w-4 h-4 opacity-60" />
-        </div>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <RevenueCard />
+        <AllocationCard />
       </div>
-    </aside>
-  );
-}
-
-function NavItem({ item, isOpen, onToggle }: { item: NavGroup; isOpen: boolean; onToggle: () => void }) {
-  const Icon = item.icon;
-  const hasChildren = !!item.children?.length;
-  return (
-    <li>
-      <button
-        onClick={hasChildren ? onToggle : undefined}
-        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-          item.active
-            ? "bg-pine-soft/20 text-white font-medium"
-            : "hover:bg-sidebar-accent"
-        }`}
-      >
-        <Icon className={`w-4 h-4 ${item.active ? "text-pine-soft" : "opacity-80"}`} />
-        <span className="flex-1 text-left truncate">{item.label}</span>
-        {item.badge != null && (
-          <span className="text-[10px] font-semibold bg-pine-soft/30 text-white px-1.5 py-0.5 rounded">
-            {item.badge}
-          </span>
-        )}
-        {hasChildren &&
-          (isOpen ? (
-            <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-          ) : (
-            <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-          ))}
-      </button>
-      {hasChildren && isOpen && (
-        <ul className="mt-1 ml-7 border-l border-sidebar-border pl-3 space-y-0.5">
-          {item.children!.map((c) => (
-            <li key={c.label}>
-              <button className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] opacity-80 hover:opacity-100 hover:bg-sidebar-accent text-left">
-                <span className="flex-1 truncate">{c.label}</span>
-                {c.badge != null && (
-                  <span className="text-[10px] font-medium bg-sidebar-accent text-white px-1.5 rounded">
-                    {c.badge}
-                  </span>
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
-  );
-}
-
-function Topbar() {
-  return (
-    <header className="flex items-center gap-4 px-8 py-4 border-b border-border bg-background sticky top-0 z-10">
-      <div className="min-w-0">
-        <div className="text-[11px] uppercase tracking-widest text-muted-foreground">Control Tower</div>
-        <div className="text-lg font-semibold">Executive Dashboard</div>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <ApprovalsCard />
+        <AlertsCard />
       </div>
-      <div className="flex-1 max-w-xl mx-6">
-        <div className="relative">
-          <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search users, orders, tickets, ledger…"
-            className="w-full h-10 pl-11 pr-4 rounded-lg bg-muted/60 border border-transparent focus:outline-none focus:border-pine/40 text-sm"
-          />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
-            ⌘K
-          </span>
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <button className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border border-border text-sm hover:bg-muted/40">
-          <Clock className="w-4 h-4" /> Last 24h
-          <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-        </button>
-        <button className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-pine text-primary-foreground text-sm hover:opacity-95">
-          <Download className="w-4 h-4" /> Export report
-        </button>
-        <button className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center relative">
-          <Bell className="w-4 h-4 text-muted-foreground" />
-          <span className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-destructive" />
-        </button>
-      </div>
-    </header>
+      <OperationsStrip />
+    </AdminShell>
   );
 }
 
@@ -246,7 +114,7 @@ function StatusPill({ tone, label }: { tone: "pine" | "amber" | "rose"; label: s
   } as const;
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${map[tone]}`}>
-      <span className={`w-1.5 h-1.5 rounded-full bg-current`} />
+      <span className="w-1.5 h-1.5 rounded-full bg-current" />
       {label}
     </span>
   );
@@ -512,26 +380,6 @@ function OperationsStrip() {
           </div>
         );
       })}
-    </div>
-  );
-}
-
-function Card({
-  title, subtitle, children, className = "", action,
-}: {
-  title: string; subtitle?: string; children: React.ReactNode;
-  className?: string; action?: React.ReactNode;
-}) {
-  return (
-    <div className={`rounded-2xl bg-card border border-border p-5 ${className}`}>
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-semibold">{title}</h3>
-          {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
-        </div>
-        {action}
-      </div>
-      {children}
     </div>
   );
 }
