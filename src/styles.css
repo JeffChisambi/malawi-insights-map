@@ -39,6 +39,11 @@
   --color-teal: var(--teal);
   --color-teal-soft: var(--teal-soft);
   --color-purple-line: var(--purple-line);
+  --color-pine: var(--pine);
+  --color-pine-soft: var(--pine-soft);
+  --color-amber: var(--amber);
+  --color-rose: var(--rose);
+  --color-sky: var(--sky);
 }
 
 :root {
