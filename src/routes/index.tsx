@@ -162,7 +162,7 @@ function Kpi({
   return (
     <div className="rounded-xl bg-card border border-border p-4 flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${toneMap}`}>
+        <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground">
           <Icon className="w-4.5 h-4.5" />
         </div>
         <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${trendMap}`}>
