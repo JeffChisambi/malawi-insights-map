@@ -95,11 +95,6 @@ function PageHeader() {
     <div className="flex flex-wrap items-end justify-between gap-3 pt-6">
       <div>
       </div>
-      <div className="flex items-center gap-2 text-xs">
-        <StatusPill tone="pine" label="Markets open" />
-        <StatusPill tone="amber" label="Settlement T+2 · 14 pending" />
-        <StatusPill tone="rose" label="7 risk alerts" />
-      </div>
     </div>
   );
 }
