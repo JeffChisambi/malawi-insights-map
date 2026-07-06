@@ -348,14 +348,15 @@ function NavItem({
   const Icon = item.icon;
   const hasChildren = !!item.children?.length;
 
-  /* ── Collapsed: icon only ── */
+  /* ── Collapsed: icon only + branded flyout ── */
   if (collapsed) {
     const cls = `relative w-full flex items-center justify-center p-2.5 rounded-lg transition-colors ${
       active ? "bg-pine/10" : "hover:bg-gray-100"
     }`;
     return (
-      <li>
-        <div className="relative" title={item.label}>
+      <li className="group relative">
+        {/* Icon */}
+        <div className="relative">
           {item.href ? (
             <Link to={item.href} className={cls}>
               <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
@@ -368,6 +369,57 @@ function NavItem({
           {item.badge != null && (
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-pine" />
           )}
+        </div>
+
+        {/* Branded flyout — transparent bridge (pl-2) closes the gap so hover is seamless */}
+        <div className="pointer-events-none group-hover:pointer-events-auto absolute left-full top-0 z-50 pl-2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-100 min-w-[192px] overflow-hidden">
+            {/* Header */}
+            <div className={`px-3.5 py-2.5 flex items-center gap-2.5 border-b ${active ? "border-pine/20 bg-pine/5" : "border-gray-100"}`}>
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${active ? "bg-pine/15" : "bg-gray-100"}`}>
+                <Icon className={`w-3.5 h-3.5 ${active ? "text-pine" : "text-gray-500"}`} />
+              </div>
+              <span className={`text-[12px] font-semibold leading-none ${active ? "text-pine" : "text-gray-800"}`}>
+                {item.label}
+              </span>
+              {item.badge != null && (
+                <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-pine/10 text-pine leading-none shrink-0">
+                  {item.badge}
+                </span>
+              )}
+            </div>
+
+            {/* Children list */}
+            {hasChildren ? (
+              <ul className="py-1 max-h-72 overflow-y-auto">
+                {item.children!.map((c) => {
+                  const row = (
+                    <>
+                      <span className="flex-1 truncate">{c.label}</span>
+                      {c.badge != null && (
+                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-pine/10 text-pine leading-none shrink-0">
+                          {c.badge}
+                        </span>
+                      )}
+                    </>
+                  );
+                  const rowCls = "w-full flex items-center gap-2 px-3.5 py-[7px] text-[12px] text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors text-left";
+                  return (
+                    <li key={c.label}>
+                      {c.href
+                        ? <Link to={c.href} className={rowCls}>{row}</Link>
+                        : <button className={rowCls}>{row}</button>}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              /* No-children item: just the label acts as the tooltip */
+              <div className="px-3.5 py-2.5 text-[12px] text-gray-500">
+                {item.label}
+              </div>
+            )}
+          </div>
         </div>
       </li>
     );
