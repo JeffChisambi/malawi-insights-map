@@ -297,7 +297,7 @@ function Sidebar({
         </div>
         {!collapsed && (
           <div className="ml-3 flex-1 min-w-0">
-            <div className="text-[15px] font-bold text-gray-900 leading-none">Pine</div>
+            <div className="text-[15px] font-bold text-foreground leading-none">Pine</div>
             <div className="text-[9px] tracking-[0.18em] text-gray-400 mt-0.5">BROKER ADMIN</div>
           </div>
         )}
