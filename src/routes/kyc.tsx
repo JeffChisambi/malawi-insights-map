@@ -207,7 +207,7 @@ function KycPage() {
             </button>
           </div>
 
-          <KycTable rows={rows} onSelect={setSelected} />
+          <KycTable rows={rows} onSelect={setSelected} showDetailColumns={activeTab === "all"} />
 
           <div className="flex items-center justify-between px-5 py-3 border-t border-border text-xs text-muted-foreground">
             <div>Showing <span className="text-foreground font-medium">{Math.min(rows.length, 25)}</span> of {rows.length}</div>
@@ -370,7 +370,8 @@ function FilterTabsDropdown({ activeTab, setActiveTab }: { activeTab: string; se
 
 /* ─────────────────────────── table ─────────────────────────── */
 
-function KycTable({ rows, onSelect }: { rows: KycApplication[]; onSelect: (a: KycApplication) => void }) {
+function KycTable({ rows, onSelect, showDetailColumns }: { rows: KycApplication[]; onSelect: (a: KycApplication) => void; showDetailColumns: boolean }) {
+  const colCount = showDetailColumns ? 10 : 6;
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
@@ -381,20 +382,24 @@ function KycTable({ rows, onSelect }: { rows: KycApplication[]; onSelect: (a: Ky
             <th className="py-2.5 text-left font-medium">Document</th>
             <th className="py-2.5 text-left font-medium">Tier</th>
             <th className="py-2.5 text-left font-medium">Status</th>
-            <th className="py-2.5 text-left font-medium">OCR</th>
-            <th className="py-2.5 text-left font-medium">Face</th>
-            <th className="py-2.5 text-left font-medium">Submitted</th>
-            <th className="py-2.5 text-left font-medium">Flags</th>
+            {showDetailColumns && (
+              <>
+                <th className="py-2.5 text-left font-medium">OCR</th>
+                <th className="py-2.5 text-left font-medium">Face</th>
+                <th className="py-2.5 text-left font-medium">Submitted</th>
+                <th className="py-2.5 text-left font-medium">Flags</th>
+              </>
+            )}
             <th className="pr-5 py-2.5"></th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r, idx) => (
-            <KycRow key={r.id} app={r} idx={idx + 1} onSelect={onSelect} />
+            <KycRow key={r.id} app={r} idx={idx + 1} onSelect={onSelect} showDetailColumns={showDetailColumns} />
           ))}
           {rows.length === 0 && (
             <tr>
-              <td colSpan={10} className="py-16 text-center text-sm text-muted-foreground">
+              <td colSpan={colCount} className="py-16 text-center text-sm text-muted-foreground">
                 No applications match these filters.
               </td>
             </tr>
@@ -405,7 +410,7 @@ function KycTable({ rows, onSelect }: { rows: KycApplication[]; onSelect: (a: Ky
   );
 }
 
-function KycRow({ app, idx, onSelect }: { app: KycApplication; idx: number; onSelect: (a: KycApplication) => void }) {
+function KycRow({ app, idx, onSelect, showDetailColumns }: { app: KycApplication; idx: number; onSelect: (a: KycApplication) => void; showDetailColumns: boolean }) {
   return (
     <tr
       className="border-b border-border hover:bg-muted/30 transition-colors cursor-pointer"
@@ -428,22 +433,26 @@ function KycRow({ app, idx, onSelect }: { app: KycApplication; idx: number; onSe
       <td className="py-3">
         <KycStatusBadge status={app.status} />
       </td>
-      <td className="py-3">
-        <ScoreBar value={app.ocrConfidence} />
-      </td>
-      <td className="py-3">
-        <ScoreBar value={app.faceMatchScore} />
-      </td>
-      <td className="py-3 text-[12px] text-muted-foreground whitespace-nowrap">{relativeTime(app.submittedAt)}</td>
-      <td className="py-3">
-        {app.flags.length > 0 ? (
-          <span className="inline-flex items-center gap-1 text-[11px] text-amber font-medium">
-            <AlertTriangle className="w-3 h-3" /> {app.flags.length}
-          </span>
-        ) : (
-          <span className="text-[11px] text-muted-foreground">—</span>
-        )}
-      </td>
+      {showDetailColumns && (
+        <>
+          <td className="py-3">
+            <ScoreBar value={app.ocrConfidence} />
+          </td>
+          <td className="py-3">
+            <ScoreBar value={app.faceMatchScore} />
+          </td>
+          <td className="py-3 text-[12px] text-muted-foreground whitespace-nowrap">{relativeTime(app.submittedAt)}</td>
+          <td className="py-3">
+            {app.flags.length > 0 ? (
+              <span className="inline-flex items-center gap-1 text-[11px] text-amber font-medium">
+                <AlertTriangle className="w-3 h-3" /> {app.flags.length}
+              </span>
+            ) : (
+              <span className="text-[11px] text-muted-foreground">—</span>
+            )}
+          </td>
+        </>
+      )}
       <td className="pr-5 py-3" onClick={(e) => e.stopPropagation()}>
         <RowMenu onReview={() => onSelect(app)} />
       </td>
