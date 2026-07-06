@@ -24,17 +24,20 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
+// Deterministic pseudo-random function — avoids SSR/client hydration mismatch
+const rng = (n: number) => ((Math.sin(n * 127.1 + 311.7) * 43758.5453) % 1 + 1) % 1;
+
 const volumeData = Array.from({ length: 24 }, (_, i) => ({
   h: `${String(i).padStart(2, "0")}:00`,
-  volume: Math.round(400 + Math.sin(i / 3) * 220 + Math.random() * 180 + i * 12),
-  trades: Math.round(120 + Math.cos(i / 4) * 60 + Math.random() * 40),
+  volume: Math.round(400 + Math.sin(i / 3) * 220 + rng(i) * 180 + i * 12),
+  trades: Math.round(120 + Math.cos(i / 4) * 60 + rng(i + 100) * 40),
 }));
 
 const revenueData = Array.from({ length: 14 }, (_, i) => ({
   d: `${i + 1}`,
-  deposits: Math.round(500 + Math.random() * 400 + i * 25),
-  withdrawals: Math.round(300 + Math.random() * 260 + i * 12),
-  revenue: Math.round(80 + Math.random() * 60 + i * 6),
+  deposits: Math.round(500 + rng(i + 200) * 400 + i * 25),
+  withdrawals: Math.round(300 + rng(i + 300) * 260 + i * 12),
+  revenue: Math.round(80 + rng(i + 400) * 60 + i * 6),
 }));
 
 const totalDeposits = revenueData.reduce((s, d) => s + d.deposits, 0);
