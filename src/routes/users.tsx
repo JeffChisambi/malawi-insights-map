@@ -314,9 +314,6 @@ function Toolbar({
 
       <div className="ml-auto flex items-center gap-2">
         {selectedCount > 0 && <BulkActions count={selectedCount} />}
-        <button className="flex items-center gap-2 h-9 px-3 rounded-lg bg-pine text-primary-foreground text-sm hover:opacity-95">
-          <UserPlus className="w-4 h-4" /> New user
-        </button>
       </div>
     </div>
   );
