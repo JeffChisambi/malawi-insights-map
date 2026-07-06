@@ -534,7 +534,6 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <header className="flex items-center gap-4 px-8 py-4 bg-background sticky top-0 z-10">
       <div className="min-w-0">
-        <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{eyebrow}</div>
         <div className="text-lg font-semibold">{title}</div>
       </div>
       <div className="flex-1 max-w-xl mx-6">
