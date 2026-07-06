@@ -6,6 +6,7 @@ import {
   Bell, Star, BarChart3, Headphones, AlertTriangle, Scale, KeyRound, UserCog,
   Activity, ListChecks, History, Settings, Plug, DatabaseBackup,
   ChevronDown, ChevronRight, Search, Download, Trees, CircleUser, Clock,
+  PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
 
 export type NavChild = { label: string; href?: string; badge?: string | number };
@@ -240,9 +241,10 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({ [activeLabel]: true });
+  const [collapsed, setCollapsed] = useState(false);
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
-      <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} />
+      <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} collapsed={collapsed} onToggleCollapse={() => setCollapsed((c) => !c)} />
       <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
         <Topbar eyebrow={eyebrow} title={title} />
         <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-10 space-y-6">{children}</div>
@@ -252,32 +254,52 @@ export function AdminShell({
 }
 
 function Sidebar({
-  open, setOpen, activeLabel,
+  open, setOpen, activeLabel, collapsed, onToggleCollapse,
 }: {
   open: Record<string, boolean>;
   setOpen: (v: Record<string, boolean>) => void;
   activeLabel: string;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }) {
   return (
-    <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border">
-      <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
-        <div className="w-9 h-9 flex items-center justify-center">
+    <aside
+      className="shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border transition-all duration-300 ease-in-out overflow-hidden"
+      style={{ width: collapsed ? "4rem" : "18rem" }}
+    >
+      {/* Header */}
+      <div className="px-3 py-4 flex items-center border-b border-sidebar-border" style={{ minHeight: "4rem" }}>
+        <div className="w-9 h-9 shrink-0 flex items-center justify-center">
           <img src="/logo.png" alt="Pine logo" className="w-9 h-9 object-contain" />
         </div>
-        <div>
-          <div className="font-bold text-[15px] leading-tight text-white">Pine</div>
-          <div className="text-[10px] tracking-[0.15em] opacity-70">BROKER ADMIN</div>
-        </div>
+        {!collapsed && (
+          <div className="ml-2.5 flex-1 min-w-0">
+            <div className="font-bold text-[15px] leading-tight text-white">Pine</div>
+            <div className="text-[10px] tracking-[0.15em] opacity-70">BROKER ADMIN</div>
+          </div>
+        )}
+        <button
+          onClick={onToggleCollapse}
+          className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors ${collapsed ? "mx-auto" : "ml-1"}`}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+        </button>
       </div>
-      <nav className="flex-1 overflow-y-auto scrollbar-hide px-3 py-3 space-y-4">
+
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto scrollbar-hide px-2 py-3 space-y-4">
         {sectionOrder.map((section) => {
           const items = nav.filter((n) => n.section === section);
           if (!items.length) return null;
           return (
             <div key={section}>
-              <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-[0.15em] opacity-60">
-                {section}
-              </div>
+              {!collapsed && (
+                <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-[0.15em] opacity-60">
+                  {section}
+                </div>
+              )}
+              {collapsed && <div className="my-1 mx-2 border-t border-sidebar-border opacity-30" />}
               <ul className="space-y-0.5">
                 {items.map((item) => (
                   <NavItem
@@ -286,6 +308,7 @@ function Sidebar({
                     active={item.label === activeLabel}
                     isOpen={!!open[item.label]}
                     onToggle={() => setOpen({ ...open, [item.label]: !open[item.label] })}
+                    collapsed={collapsed}
                   />
                 ))}
               </ul>
@@ -293,16 +316,22 @@ function Sidebar({
           );
         })}
       </nav>
-      <div className="p-3 border-t border-sidebar-border">
-        <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sidebar-accent">
-          <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
+
+      {/* User footer */}
+      <div className="p-2 border-t border-sidebar-border">
+        <div className={`flex items-center rounded-lg hover:bg-sidebar-accent px-1.5 py-2 ${collapsed ? "justify-center" : "gap-3"}`}>
+          <div className="w-9 h-9 shrink-0 rounded-full bg-white/10 flex items-center justify-center">
             <CircleUser className="w-5 h-5 text-white" />
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-medium text-white truncate">Muhammad Irfan</div>
-            <div className="text-[11px] opacity-70 truncate">Super Admin</div>
-          </div>
-          <ChevronDown className="w-4 h-4 opacity-60" />
+          {!collapsed && (
+            <>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium text-white truncate">Muhammad Irfan</div>
+                <div className="text-[11px] opacity-70 truncate">Super Admin</div>
+              </div>
+              <ChevronDown className="w-4 h-4 opacity-60 shrink-0" />
+            </>
+          )}
         </div>
       </div>
     </aside>
@@ -310,18 +339,42 @@ function Sidebar({
 }
 
 function NavItem({
-  item, active, isOpen, onToggle,
+  item, active, isOpen, onToggle, collapsed,
 }: {
-  item: NavGroup; active: boolean; isOpen: boolean; onToggle: () => void;
+  item: NavGroup; active: boolean; isOpen: boolean; onToggle: () => void; collapsed: boolean;
 }) {
   const Icon = item.icon;
   const hasChildren = !!item.children?.length;
+
+  if (collapsed) {
+    const collapsedCls = `w-full flex items-center justify-center p-2 rounded-lg transition-colors ${
+      active ? "bg-white/10 text-white" : "hover:bg-sidebar-accent opacity-80 hover:opacity-100"
+    }`;
+    const btn = (
+      <div title={item.label} className="relative">
+        {item.href ? (
+          <Link to={item.href} className={collapsedCls}>
+            <Icon className={`w-5 h-5 ${active ? "text-pine-soft" : ""}`} />
+          </Link>
+        ) : (
+          <button className={collapsedCls}>
+            <Icon className={`w-5 h-5 ${active ? "text-pine-soft" : ""}`} />
+          </button>
+        )}
+        {item.badge != null && (
+          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-pine-soft" />
+        )}
+      </div>
+    );
+    return <li>{btn}</li>;
+  }
+
   const cls = `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
     active ? "bg-white/10 text-white font-medium" : "hover:bg-sidebar-accent"
   }`;
   const inner = (
     <>
-      <Icon className={`w-4 h-4 ${active ? "text-pine-soft" : "opacity-80"}`} />
+      <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "opacity-80"}`} />
       <span className="flex-1 text-left truncate">{item.label}</span>
       {item.badge != null && (
         <span className="text-[10px] font-semibold bg-pine-soft/30 text-white px-1.5 py-0.5 rounded">
