@@ -587,9 +587,6 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
             placeholder="Search users, orders, tickets, ledger…"
             className="w-full h-10 pl-11 pr-4 rounded-lg bg-muted/60 border border-transparent focus:outline-none focus:border-pine/40 text-sm"
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
-            ⌘K
-          </span>
         </div>
       </div>
       <div className="flex items-center gap-2">
