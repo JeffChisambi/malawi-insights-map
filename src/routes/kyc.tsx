@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useRef } from "react";
 import {
   ShieldCheck, Clock, CheckCircle2, XCircle, FileText,
-  Eye, MoreHorizontal, Search, ChevronDown, AlertTriangle, User,
+  Eye, MoreHorizontal, ChevronDown, AlertTriangle, User,
   Camera, ScanLine, ClipboardList, FilePlus,
   TrendingUp, TrendingDown, Copy, Phone, MapPin, Calendar,
   Download, Fingerprint, ZoomIn, RotateCw, ExternalLink,
@@ -141,20 +141,17 @@ const allTabs: Tab[] = [...tabs, ...filterTabs];
 
 function KycPage() {
   const [activeTab, setActiveTab] = useState("pending");
-  const [q, setQ] = useState("");
   const [selected, setSelected] = useState<KycApplication | null>(null);
   const [sortBy, setSortBy] = useState<"submitted" | "name" | "score">("submitted");
 
   const tab = allTabs.find((t) => t.key === activeTab)!;
 
   const rows = useMemo(() => {
-    const base = applications.filter(tab.filter).filter((a) =>
-      !q || (a.name + a.email + a.id + a.userId).toLowerCase().includes(q.toLowerCase())
-    );
+    const base = applications.filter(tab.filter);
     if (sortBy === "name") return [...base].sort((a, b) => a.name.localeCompare(b.name));
     if (sortBy === "score") return [...base].sort((a, b) => a.ocrConfidence - b.ocrConfidence);
     return [...base].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
-  }, [activeTab, q, sortBy]);
+  }, [activeTab, sortBy]);
 
   return (
     <AdminShell activeLabel="KYC Management" eyebrow="Clients" title="KYC Management">
@@ -191,15 +188,6 @@ function KycPage() {
       <Card className="!p-0 overflow-hidden">
           {/* Toolbar */}
           <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
-            <div className="relative flex-1 max-w-xs">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search by name or ID…"
-                className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/60 border border-transparent focus:outline-none focus:border-pine/40 text-sm"
-              />
-            </div>
             <SortPill sortBy={sortBy} setSortBy={setSortBy} />
             <button className="ml-auto flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border text-sm text-muted-foreground hover:bg-muted/40">
               <Download className="w-3.5 h-3.5" /> Export
