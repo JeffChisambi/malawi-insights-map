@@ -276,27 +276,24 @@ function Tabs({
         {tabs.map((t, i) => {
           const isActive = t.key === active;
           return (
-            <Fragment key={t.key}>
-              {i === insertIndex && (
-                <div className="flex items-center py-2">
-                  <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
-                </div>
-              )}
-              <button
-                onClick={() => onChange(t.key)}
-                className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
-                  isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t.label}
-                <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
-                  {counts[i]}
-                </span>
-                {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
-              </button>
-            </Fragment>
+            <button
+              key={t.key}
+              onClick={() => onChange(t.key)}
+              className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
+                isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t.label}
+              <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
+                {counts[i]}
+              </span>
+              {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
+            </button>
           );
         })}
+        <div className="ml-auto flex items-center py-2">
+          <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
+        </div>
       </div>
     </>
   );
