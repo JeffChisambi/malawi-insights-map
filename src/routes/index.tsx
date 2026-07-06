@@ -70,7 +70,7 @@ const health = [
 
 function Dashboard() {
   return (
-    <AdminShell activeLabel="Executive Dashboard" eyebrow="Control Tower" title="Executive Dashboard">
+    <AdminShell activeLabel="Executive Dashboard" eyebrow="Control Tower" title="Overview">
       <PageHeader />
       <KpiGrid />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
