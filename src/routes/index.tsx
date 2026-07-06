@@ -126,7 +126,11 @@ function StatusPill({ tone, label }: { tone: "pine" | "amber" | "rose"; label: s
 function KpiGrid() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <Kpi icon={Users} label="Registered users" value="184,203" delta="+2.4%" trend="up" sub="12,842 active today" />
+      <KpiDouble
+        icon={Users}
+        left={{ label: "Registered users", value: "184,203", delta: "+2.4%", trend: "up", sub: "12,842 active today" }}
+        right={{ label: "New signups (24h)", value: "1,284", delta: "+6.1%", trend: "up", sub: "812 verified" }}
+      />
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
       <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
       <Kpi icon={DollarSign} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
@@ -134,7 +138,6 @@ function KpiGrid() {
       <Kpi icon={ArrowDownRight} label="Withdrawals today" value="MWK 942M" delta="-3.6%" trend="down" sub="1,984 txns" tone="rose" />
       <Kpi icon={Landmark} label="AUM" value="MWK 812.4B" delta="+1.8%" trend="up" sub="30-day change" />
       <Kpi icon={FileCheck2} label="Pending approvals" value="46" delta="urgent" trend="flat" sub="12 KYC · 9 payouts" tone="amber" />
-      <Kpi icon={UserPlus} label="New signups (24h)" value="1,284" delta="+6.1%" trend="up" sub="812 verified" />
       <Kpi icon={ShieldAlert} label="Risk alerts" value="7" delta="review" trend="flat" sub="AML · velocity · IP" tone="rose" />
     </div>
   );
@@ -174,6 +177,47 @@ function Kpi({
         <div className="text-xl font-bold mt-0.5">{value}</div>
         <div className="text-[11px] text-muted-foreground mt-1">{sub}</div>
       </div>
+    </div>
+  );
+}
+
+function KpiDouble({
+  icon: Icon,
+  left,
+  right,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  left:  { label: string; value: string; delta: string; trend: "up" | "down" | "flat"; sub: string };
+  right: { label: string; value: string; delta: string; trend: "up" | "down" | "flat"; sub: string };
+}) {
+  function Side({ stat }: { stat: typeof left }) {
+    const trendMap = {
+      up: "text-pine bg-pine/10",
+      down: "text-rose bg-rose/10",
+      flat: "text-amber bg-amber/10",
+    }[stat.trend];
+    const TrendIcon = stat.trend === "up" ? TrendingUp : stat.trend === "down" ? TrendingDown : Clock;
+    return (
+      <div className="flex-1 min-w-0 flex flex-col gap-2">
+        <span className={`self-start inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${trendMap}`}>
+          <TrendIcon className="w-3 h-3" /> {stat.delta}
+        </span>
+        <div>
+          <div className="text-xs text-muted-foreground">{stat.label}</div>
+          <div className="text-xl font-bold mt-0.5">{stat.value}</div>
+          <div className="text-[11px] text-muted-foreground mt-1">{stat.sub}</div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="col-span-2 rounded-xl bg-card border border-border p-4 flex gap-4 items-start">
+      <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground shrink-0">
+        <Icon className="w-4.5 h-4.5" />
+      </div>
+      <Side stat={left} />
+      <div className="w-px self-stretch bg-border shrink-0" />
+      <Side stat={right} />
     </div>
   );
 }
