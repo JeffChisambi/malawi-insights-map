@@ -328,7 +328,7 @@ function Sidebar({
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <div className="text-[13px] font-medium text-gray-800 leading-none truncate">Muhammad Irfan</div>
+                <div className="text-[13px] font-medium text-gray-800 leading-none truncate">Prince Chitseka</div>
                 <div className="text-[9px] tracking-[0.1em] text-gray-400 mt-0.5 truncate">SUPER ADMIN</div>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-gray-300 shrink-0" />
