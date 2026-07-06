@@ -426,15 +426,14 @@ function NavItem({
         </button>
       )}
 
-      {/* Children with vertical connector */}
+      {/* Children with rounded-L connectors */}
       {hasChildren && isOpen && (
-        <ul className="mt-0.5 ml-[22px] relative">
-          <div className="absolute left-0 top-1 bottom-2 w-px bg-gray-200" />
-          {item.children!.map((c) => {
-            const childCls = "relative w-full flex items-center gap-2 pl-5 pr-2 py-[6px] text-[12px] transition-colors text-gray-400 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg text-left";
+        <ul className="mt-1 ml-4 space-y-0.5 pb-1">
+          {item.children!.map((c, idx) => {
+            const isLast = idx === item.children!.length - 1;
+            const childCls = "w-full flex items-center gap-2 pr-2 py-[7px] text-[12px] transition-colors text-gray-400 hover:text-gray-700 hover:bg-gray-50 rounded-lg text-left";
             const childContent = (
               <>
-                <div className="absolute left-0 top-1/2 w-3.5 h-px bg-gray-200" />
                 <span className="flex-1 truncate">{c.label}</span>
                 {c.badge != null && (
                   <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full leading-none shrink-0">
@@ -444,7 +443,13 @@ function NavItem({
               </>
             );
             return (
-              <li key={c.label}>
+              <li key={c.label} className="relative pl-[26px]">
+                {/* Rounded-corner L: vertical (top→mid) + horizontal arm, curved at junction */}
+                <div className="pointer-events-none absolute left-[5px] top-0 h-[calc(50%+1px)] w-[14px] border-l-[1.5px] border-b-[1.5px] border-gray-200 rounded-bl-[6px]" />
+                {/* Vertical extension below midpoint (connects to next sibling) */}
+                {!isLast && (
+                  <div className="pointer-events-none absolute left-[5px] top-1/2 bottom-0 w-[1.5px] bg-gray-200" />
+                )}
                 {c.href
                   ? <Link to={c.href} className={childCls}>{childContent}</Link>
                   : <button className={childCls}>{childContent}</button>}
