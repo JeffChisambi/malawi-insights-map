@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Users, FileCheck2, CandlestickChart, Briefcase, Headphones, Scale,
-  TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Clock,
+  TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Clock,
   CheckCircle2, XCircle, Server, Cpu, HardDrive, Wifi, DollarSign, Coins,
   Landmark, UserCheck, UserPlus, ShieldAlert, Zap, Activity, DatabaseBackup,
 } from "lucide-react";
@@ -134,8 +134,11 @@ function KpiGrid() {
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
       <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
       <Kpi icon={DollarSign} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
-      <Kpi icon={ArrowUpRight} label="Deposits today" value="MWK 1.42B" delta="+8.2%" trend="up" sub="3,102 txns" tone="pine" />
-      <Kpi icon={ArrowDownRight} label="Withdrawals today" value="MWK 942M" delta="-3.6%" trend="down" sub="1,984 txns" tone="rose" />
+      <KpiDouble
+        icon={ArrowLeftRight}
+        left={{ label: "Deposits today", value: "MWK 1.42B", delta: "+8.2%", trend: "up", sub: "3,102 txns" }}
+        right={{ label: "Withdrawals today", value: "MWK 942M", delta: "-3.6%", trend: "down", sub: "1,984 txns" }}
+      />
       <Kpi icon={Landmark} label="AUM" value="MWK 812.4B" delta="+1.8%" trend="up" sub="30-day change" />
       <Kpi icon={FileCheck2} label="Pending approvals" value="46" delta="urgent" trend="flat" sub="12 KYC · 9 payouts" tone="amber" />
       <Kpi icon={ShieldAlert} label="Risk alerts" value="7" delta="review" trend="flat" sub="AML · velocity · IP" tone="rose" />
