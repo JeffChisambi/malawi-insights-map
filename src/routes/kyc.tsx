@@ -124,17 +124,22 @@ type Tab = { key: string; label: string; icon: React.ComponentType<{ className?:
 
 const tabs: Tab[] = [
   { key: "all", label: "All", icon: ClipboardList, filter: () => true },
-  { key: "pending", label: "Pending Review", icon: Clock, filter: (a) => a.status === "pending" },
   { key: "documents", label: "Documents", icon: FileText, filter: (a) => a.status !== "approved" },
   { key: "face", label: "Face Verification", icon: Camera, filter: (a) => a.faceMatchScore < 80 || a.status === "pending" },
   { key: "ocr", label: "OCR Results", icon: ScanLine, filter: (a) => a.ocrConfidence < 85 },
+  { key: "history", label: "History", icon: History, filter: () => true },
+];
+
+const filterTabs: Tab[] = [
+  { key: "audit", label: "Audit Trail", icon: BookOpen, filter: () => true },
+  { key: "manual", label: "Manual Review", icon: Eye, filter: (a) => a.status === "manual" },
   { key: "approved", label: "Approved", icon: CheckCircle2, filter: (a) => a.status === "approved" },
   { key: "rejected", label: "Rejected", icon: XCircle, filter: (a) => a.status === "rejected" },
   { key: "additional", label: "Additional Docs", icon: FilePlus, filter: (a) => a.status === "additional_docs" },
-  { key: "history", label: "History", icon: History, filter: () => true },
-  { key: "manual", label: "Manual Review", icon: Eye, filter: (a) => a.status === "manual" },
-  { key: "audit", label: "Audit Trail", icon: BookOpen, filter: () => true },
+  { key: "pending", label: "Pending Review", icon: Clock, filter: (a) => a.status === "pending" },
 ];
+
+const allTabs: Tab[] = [...tabs, ...filterTabs];
 
 /* ─────────────────────────── page ─────────────────────────── */
 
@@ -144,7 +149,7 @@ function KycPage() {
   const [selected, setSelected] = useState<KycApplication | null>(null);
   const [sortBy, setSortBy] = useState<"submitted" | "name" | "score">("submitted");
 
-  const tab = tabs.find((t) => t.key === activeTab)!;
+  const tab = allTabs.find((t) => t.key === activeTab)!;
 
   const rows = useMemo(() => {
     const base = applications.filter(tab.filter).filter((a) =>
@@ -182,6 +187,7 @@ function KycPage() {
             </button>
           );
         })}
+        <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {/* Audit / History tabs: text view */}
@@ -308,6 +314,62 @@ function SortPill({ sortBy, setSortBy }: { sortBy: string; setSortBy: (v: any) =
               {l}
             </button>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────── filter tabs dropdown ─────────────────────────── */
+
+function FilterTabsDropdown({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, [open]);
+
+  const activeFilterTab = filterTabs.find((t) => t.key === activeTab);
+  const ButtonIcon = activeFilterTab?.icon ?? FileText;
+
+  return (
+    <div ref={ref} className="relative ml-0.5 shrink-0">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={`relative flex items-center gap-1.5 whitespace-nowrap px-3 py-3 text-[13px] font-medium transition-colors ${
+          activeFilterTab ? "text-pine" : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        <ButtonIcon className="w-3.5 h-3.5" />
+        {activeFilterTab ? activeFilterTab.label : "Filter"}
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+        {activeFilterTab && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-pine rounded-full" />}
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 z-50 min-w-[13rem] rounded-xl border border-border bg-card shadow-lg py-1 overflow-hidden">
+          {filterTabs.map((t) => {
+            const Icon = t.icon;
+            const count = applications.filter(t.filter).length;
+            const isActive = t.key === activeTab;
+            return (
+              <button
+                key={t.key}
+                onClick={() => { setActiveTab(t.key); setOpen(false); }}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
+                  isActive ? "bg-pine/10 text-pine font-medium" : "text-foreground hover:bg-muted/50"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5 shrink-0" />
+                <span className="flex-1 text-left">{t.label}</span>
+                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
