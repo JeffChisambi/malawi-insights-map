@@ -115,7 +115,7 @@ function StatusPill({ tone, label }: { tone: "pine" | "amber" | "rose"; label: s
 
 function KpiGrid() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
       <Kpi icon={Users} label="Registered users" value="184,203" delta="+2.4%" trend="up" sub="12,842 active today" />
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
       <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
