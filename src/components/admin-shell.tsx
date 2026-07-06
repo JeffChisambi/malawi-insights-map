@@ -107,14 +107,7 @@ export const nav: NavGroup[] = [
       { label: "Scheduled" }, { label: "Pinned" }, { label: "Archive" },
     ],
   },
-  {
-    section: "ENGAGEMENT", icon: Bell, label: "Notifications", href: "/notifications",
-    children: [
-      { label: "Push" }, { label: "Email Campaigns" }, { label: "SMS" }, { label: "Broadcasts" },
-      { label: "Scheduled" }, { label: "Delivery Status" }, { label: "Retry Failed" },
-      { label: "Templates" }, { label: "History" },
-    ],
-  },
+  { section: "ENGAGEMENT", icon: Bell, label: "Notifications", href: "/notifications" },
   {
     section: "ENGAGEMENT", icon: Star, label: "Watchlists & Alerts",
     children: [
