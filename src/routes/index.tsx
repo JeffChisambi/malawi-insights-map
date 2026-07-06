@@ -160,9 +160,9 @@ function Kpi({
     rose: "text-rose bg-rose/10",
   }[tone];
   const trendMap = {
-    up: "text-pine bg-pine/10",
-    down: "text-rose bg-rose/10",
-    flat: "text-amber bg-amber/10",
+    up: "text-pine",
+    down: "text-rose",
+    flat: "text-amber",
   }[trend];
   const TrendIcon = trend === "up" ? TrendingUp : trend === "down" ? TrendingDown : Clock;
   return (
@@ -171,7 +171,7 @@ function Kpi({
         <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground">
           <Icon className="w-4.5 h-4.5" />
         </div>
-        <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${trendMap}`}>
+        <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
           <TrendIcon className="w-3 h-3" /> {delta}
         </span>
       </div>
@@ -195,14 +195,14 @@ function KpiDouble({
 }) {
   function Side({ stat }: { stat: typeof left }) {
     const trendMap = {
-      up: "text-pine bg-pine/10",
-      down: "text-rose bg-rose/10",
-      flat: "text-amber bg-amber/10",
+      up: "text-pine",
+      down: "text-rose",
+      flat: "text-amber",
     }[stat.trend];
     const TrendIcon = stat.trend === "up" ? TrendingUp : stat.trend === "down" ? TrendingDown : Clock;
     return (
       <div className="flex-1 min-w-0 flex flex-col gap-2">
-        <span className={`self-start inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${trendMap}`}>
+        <span className={`self-start inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
           <TrendIcon className="w-3 h-3" /> {stat.delta}
         </span>
         <div>
