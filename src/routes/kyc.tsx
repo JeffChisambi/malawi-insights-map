@@ -470,9 +470,11 @@ function Initials({ name }: { name: string }) {
 }
 
 function TierBadge({ tier }: { tier: TierRequested }) {
-  return tier === "tier2"
-    ? <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-pine/10 text-pine">Tier 2</span>
-    : <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-muted text-foreground">Tier 1</span>;
+  return (
+    <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-muted text-foreground">
+      {tier === "tier2" ? "Tier 2" : "Tier 1"}
+    </span>
+  );
 }
 
 function KycStatusBadge({ status }: { status: KycStatus }) {
