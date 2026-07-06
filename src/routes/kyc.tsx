@@ -250,13 +250,12 @@ function KycStats() {
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 pt-6">
       {stats.map((s) => {
         const Icon = s.icon;
-        const toneMap = { pine: "text-pine bg-pine/10", amber: "text-amber bg-amber/10", rose: "text-rose bg-rose/10" }[s.tone];
         const Trend = s.up ? TrendingUp : TrendingDown;
         return (
           <div key={s.label} className="rounded-xl bg-card border border-border p-4">
             <div className="flex items-center justify-between">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${toneMap}`}>
-                <Icon className="w-4 h-4" />
+              <div className="w-9 h-9 flex items-center justify-center">
+                <Icon className="w-4 h-4 text-muted-foreground" />
               </div>
               <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${s.up ? "text-pine" : "text-amber"}`}>
                 <Trend className="w-3 h-3" /> {s.trend}
