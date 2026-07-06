@@ -6,7 +6,7 @@ import {
   Wallet, BookOpen, CreditCard, Building2, LineChart as LineChartIcon, Newspaper,
   Bell, Star, BarChart3, Headphones, AlertTriangle, Scale, KeyRound, UserCog,
   Activity, ListChecks, History, Settings, Plug, DatabaseBackup,
-  ChevronDown, ChevronRight, ChevronLeft, Search, Download, CircleUser, Clock,
+  ChevronDown, ChevronRight, ChevronLeft, Search, CircleUser, Clock, Sun, Moon,
 } from "lucide-react";
 
 export type NavChild = { label: string; href?: string; badge?: string | number };
@@ -556,6 +556,24 @@ function NavItem({
 }
 
 function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
+  const [dark, setDark] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const stored = localStorage.getItem("pine-theme");
+    if (stored) return stored === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dark) {
+      root.classList.add("dark");
+      localStorage.setItem("pine-theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("pine-theme", "light");
+    }
+  }, [dark]);
+
   return (
     <header className="flex items-center gap-4 px-8 py-4 bg-background sticky top-0 z-10">
       <div className="shrink-0 min-w-0">
@@ -579,8 +597,14 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
           <Clock className="w-4 h-4" /> Last 24h
           <ChevronDown className="w-3.5 h-3.5 opacity-60" />
         </button>
-        <button className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-pine text-primary-foreground text-sm hover:opacity-95">
-          <Download className="w-4 h-4" /> Export
+        <button
+          onClick={() => setDark((d) => !d)}
+          className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"
+          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {dark
+            ? <Sun className="w-4 h-4 text-muted-foreground" />
+            : <Moon className="w-4 h-4 text-muted-foreground" />}
         </button>
         <button className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center relative">
           <Bell className="w-4 h-4 text-muted-foreground" />
