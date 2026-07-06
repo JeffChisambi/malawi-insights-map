@@ -142,14 +142,13 @@ const allTabs: Tab[] = [...tabs, ...filterTabs];
 function KycPage() {
   const [activeTab, setActiveTab] = useState("pending");
   const [selected, setSelected] = useState<KycApplication | null>(null);
-  const [sortBy, setSortBy] = useState<"submitted" | "name" | "score">("submitted");
+  const [sortBy, setSortBy] = useState<"submitted" | "name">("submitted");
 
   const tab = allTabs.find((t) => t.key === activeTab)!;
 
   const rows = useMemo(() => {
     const base = applications.filter(tab.filter);
     if (sortBy === "name") return [...base].sort((a, b) => a.name.localeCompare(b.name));
-    if (sortBy === "score") return [...base].sort((a, b) => a.ocrConfidence - b.ocrConfidence);
     return [...base].sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
   }, [activeTab, sortBy]);
 
@@ -182,9 +181,8 @@ function KycPage() {
             );
           })}
         </div>
-        <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
+        <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} sortBy={sortBy} setSortBy={setSortBy} />
         <div className="ml-auto flex items-center gap-2 py-2">
-          <SortPill sortBy={sortBy} setSortBy={setSortBy} />
           <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border text-sm text-muted-foreground hover:bg-muted/40">
             <Download className="w-3.5 h-3.5" /> Export
           </button>
@@ -255,51 +253,24 @@ function KycStats() {
   );
 }
 
-/* ─────────────────────────── sort pill ─────────────────────────── */
-
-function SortPill({ sortBy, setSortBy }: { sortBy: string; setSortBy: (v: any) => void }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const options: [string, string][] = [
-    ["submitted", "Date Submitted"],
-    ["name", "Name (A–Z)"],
-    ["score", "OCR Score ↑"],
-  ];
-  useEffect(() => {
-    if (!open) return;
-    const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, [open]);
-  const label = options.find(([v]) => v === sortBy)?.[1];
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border text-sm text-foreground hover:bg-muted/40"
-      >
-        {label} <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-      </button>
-      {open && (
-        <div className="absolute left-0 top-full mt-1.5 z-50 min-w-[10rem] rounded-xl border border-border bg-card shadow-lg py-1 overflow-hidden">
-          {options.map(([v, l]) => (
-            <button
-              key={v}
-              onClick={() => { setSortBy(v); setOpen(false); }}
-              className={`w-full text-left px-3 py-2 text-sm transition-colors ${v === sortBy ? "bg-pine/10 text-pine font-medium" : "text-foreground hover:bg-muted/50"}`}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ─────────────────────────── filter tabs dropdown ─────────────────────────── */
 
-function FilterTabsDropdown({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (v: string) => void }) {
+const sortOptions: [string, string][] = [
+  ["submitted", "Date Submitted"],
+  ["name", "Name (A–Z)"],
+];
+
+function FilterTabsDropdown({
+  activeTab,
+  setActiveTab,
+  sortBy,
+  setSortBy,
+}: {
+  activeTab: string;
+  setActiveTab: (v: string) => void;
+  sortBy: string;
+  setSortBy: (v: any) => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -347,6 +318,17 @@ function FilterTabsDropdown({ activeTab, setActiveTab }: { activeTab: string; se
               </button>
             );
           })}
+          <div className="my-1 border-t border-border" />
+          <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Sort by</div>
+          {sortOptions.map(([v, l]) => (
+            <button
+              key={v}
+              onClick={() => { setSortBy(v); setOpen(false); }}
+              className={`w-full text-left px-3 py-2 text-sm transition-colors ${v === sortBy ? "bg-pine/10 text-pine font-medium" : "text-foreground hover:bg-muted/50"}`}
+            >
+              {l}
+            </button>
+          ))}
         </div>
       )}
     </div>
