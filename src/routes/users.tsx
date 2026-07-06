@@ -110,7 +110,6 @@ function UsersPage() {
   const initialTab = tabs.find((t) => t.key === search.tab)?.key ?? "all";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [q, setQ] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
   const [kycFilter, setKycFilter] = useState<"all" | Kyc>("all");
   const [riskFilter, setRiskFilter] = useState<"all" | Risk>("all");
   const [selected, setSelected] = useState<UserRow | null>(users[0]);
@@ -120,12 +119,11 @@ function UsersPage() {
     const tab = tabs.find((t) => t.key === activeTab)!;
     return users.filter((u) =>
       tab.filter(u) &&
-      (statusFilter === "all" || u.status === statusFilter) &&
       (kycFilter === "all" || u.kyc === kycFilter) &&
       (riskFilter === "all" || u.risk === riskFilter) &&
       (!q || (u.name + u.email + u.id + u.phone).toLowerCase().includes(q.toLowerCase()))
     );
-  }, [activeTab, statusFilter, kycFilter, riskFilter, q]);
+  }, [activeTab, kycFilter, riskFilter, q]);
 
   const toggle = (id: string) => {
     const next = new Set(checked);
@@ -143,7 +141,6 @@ function UsersPage() {
             <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} counts={tabs.map((t) => users.filter(t.filter).length)} />
             <Toolbar
               q={q} setQ={setQ}
-              statusFilter={statusFilter} setStatusFilter={setStatusFilter}
               kycFilter={kycFilter} setKycFilter={setKycFilter}
               riskFilter={riskFilter} setRiskFilter={setRiskFilter}
               selectedCount={checked.size}
@@ -251,13 +248,11 @@ function Tabs({
 
 function Toolbar({
   q, setQ,
-  statusFilter, setStatusFilter,
   kycFilter, setKycFilter,
   riskFilter, setRiskFilter,
   selectedCount,
 }: {
   q: string; setQ: (v: string) => void;
-  statusFilter: "all" | Status; setStatusFilter: (v: "all" | Status) => void;
   kycFilter: "all" | Kyc; setKycFilter: (v: "all" | Kyc) => void;
   riskFilter: "all" | Risk; setRiskFilter: (v: "all" | Risk) => void;
   selectedCount: number;
@@ -273,8 +268,6 @@ function Toolbar({
           className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/60 border border-transparent focus:outline-none focus:border-pine/40 text-sm"
         />
       </div>
-      <SelectPill icon={Filter} value={statusFilter} onChange={(v) => setStatusFilter(v as any)}
-        options={[["all", "All statuses"], ["active", "Active"], ["pending", "Pending"], ["frozen", "Frozen"], ["suspended", "Suspended"], ["closed", "Closed"]]} />
       <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)}
         options={[["all", "All KYC"], ["verified", "Verified"], ["tier2", "Tier 2"], ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"]]} />
       <SelectPill icon={ShieldAlert} value={riskFilter} onChange={(v) => setRiskFilter(v as any)}
@@ -282,9 +275,6 @@ function Toolbar({
 
       <div className="ml-auto flex items-center gap-2">
         {selectedCount > 0 && <BulkActions count={selectedCount} />}
-        <button className="flex items-center gap-2 h-9 px-3 rounded-lg border border-border text-sm hover:bg-muted/40">
-          <Download className="w-4 h-4" /> Export
-        </button>
         <button className="flex items-center gap-2 h-9 px-3 rounded-lg bg-pine text-primary-foreground text-sm hover:opacity-95">
           <UserPlus className="w-4 h-4" /> New user
         </button>
