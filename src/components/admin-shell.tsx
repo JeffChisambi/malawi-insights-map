@@ -282,7 +282,7 @@ function Sidebar({
       {/* Floating collapse toggle — overlaps the top-right corner */}
       <button
         onClick={onToggleCollapse}
-        className="absolute top-3 -right-4 z-20 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
+        className="absolute top-3 -right-4 z-20 w-8 h-8 rounded-full bg-muted border border-border shadow-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
         title={collapsed ? "Expand" : "Collapse"}
       >
         {collapsed
@@ -298,7 +298,7 @@ function Sidebar({
         {!collapsed && (
           <div className="ml-3 flex-1 min-w-0">
             <div className="text-[15px] font-bold text-foreground leading-none">Pine</div>
-            <div className="text-[9px] tracking-[0.18em] text-gray-400 mt-0.5">BROKER ADMIN</div>
+            <div className="text-[9px] tracking-[0.18em] text-muted-foreground mt-0.5">BROKER ADMIN</div>
           </div>
         )}
       </div>
@@ -312,8 +312,8 @@ function Sidebar({
             <div key={section} className="mb-1">
               <div className={`flex items-center px-4 py-1.5 ${collapsed ? "justify-center" : ""}`}>
                 {collapsed
-                  ? <div className="w-6 border-t border-gray-200" />
-                  : <span className="text-[9px] font-semibold tracking-[0.14em] text-gray-400">{section}</span>}
+                  ? <div className="w-6 border-t border-border" />
+                  : <span className="text-[9px] font-semibold tracking-[0.14em] text-muted-foreground">{section}</span>}
               </div>
               <ul className="px-2 space-y-px">
                 {items.map((item) => (
@@ -334,17 +334,17 @@ function Sidebar({
 
       {/* User footer */}
       <div className="shrink-0 border-t border-sidebar-border p-3">
-        <div className={`flex items-center rounded-xl px-2 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${collapsed ? "justify-center" : "gap-2.5"}`}>
-          <div className="w-8 h-8 shrink-0 rounded-full bg-gray-100 flex items-center justify-center ring-1 ring-gray-200">
-            <CircleUser className="w-4 h-4 text-gray-500" />
+        <div className={`flex items-center rounded-xl px-2 py-2 hover:bg-muted cursor-pointer transition-colors ${collapsed ? "justify-center" : "gap-2.5"}`}>
+          <div className="w-8 h-8 shrink-0 rounded-full bg-muted flex items-center justify-center ring-1 ring-border">
+            <CircleUser className="w-4 h-4 text-muted-foreground" />
           </div>
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <div className="text-[13px] font-medium text-gray-800 leading-none truncate">Prince Chitseka</div>
-                <div className="text-[9px] tracking-[0.1em] text-gray-400 mt-0.5 truncate">SUPER ADMIN</div>
+                <div className="text-[13px] font-medium text-foreground leading-none truncate">Prince Chitseka</div>
+                <div className="text-[9px] tracking-[0.1em] text-muted-foreground mt-0.5 truncate">SUPER ADMIN</div>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
             </>
           )}
         </div>
@@ -378,7 +378,7 @@ function NavItem({
   /* ── Collapsed: icon only + portal flyout (escapes overflow-y:auto) ── */
   if (collapsed) {
     const cls = `relative w-full flex items-center justify-center p-2.5 rounded-lg transition-colors ${
-      active ? "bg-pine/10" : "hover:bg-gray-100"
+      active ? "bg-pine/10" : "hover:bg-muted"
     }`;
 
     const flyout = flyoutTop !== null
@@ -389,13 +389,13 @@ function NavItem({
             onMouseEnter={cancelHide}
             onMouseLeave={scheduleHide}
           >
-            <div className="bg-white rounded-xl shadow-xl border border-gray-100 min-w-[192px] overflow-hidden">
+            <div className="bg-card rounded-xl shadow-xl border border-border min-w-[192px] overflow-hidden">
               {/* Header */}
-              <div className={`px-3.5 py-2.5 flex items-center gap-2.5 border-b ${active ? "border-pine/20 bg-pine/5" : "border-gray-100"}`}>
-                <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${active ? "bg-pine/15" : "bg-gray-100"}`}>
-                  <Icon className={`w-3.5 h-3.5 ${active ? "text-pine" : "text-gray-500"}`} />
+              <div className={`px-3.5 py-2.5 flex items-center gap-2.5 border-b ${active ? "border-pine/20 bg-pine/5" : "border-border"}`}>
+                <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${active ? "bg-pine/15" : "bg-muted"}`}>
+                  <Icon className={`w-3.5 h-3.5 ${active ? "text-pine" : "text-muted-foreground"}`} />
                 </div>
-                <span className={`text-[12px] font-semibold leading-none ${active ? "text-pine" : "text-gray-800"}`}>
+                <span className={`text-[12px] font-semibold leading-none ${active ? "text-pine" : "text-foreground"}`}>
                   {item.label}
                 </span>
                 {item.badge != null && (
@@ -408,7 +408,7 @@ function NavItem({
               {hasChildren ? (
                 <ul className="py-1 max-h-72 overflow-y-auto scrollbar-thin-gray">
                   {item.children!.map((c) => {
-                    const rowCls = "w-full flex items-center gap-2 px-3.5 py-[7px] text-[12px] text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors text-left";
+                    const rowCls = "w-full flex items-center gap-2 px-3.5 py-[7px] text-[12px] text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors text-left";
                     const row = (
                       <>
                         <span className="flex-1 truncate">{c.label}</span>
@@ -429,7 +429,7 @@ function NavItem({
                   })}
                 </ul>
               ) : (
-                <div className="px-3.5 py-2.5 text-[12px] text-gray-500">{item.label}</div>
+                <div className="px-3.5 py-2.5 text-[12px] text-muted-foreground">{item.label}</div>
               )}
             </div>
           </div>,
@@ -450,11 +450,11 @@ function NavItem({
         <div className="relative">
           {item.href ? (
             <Link to={item.href} className={cls}>
-              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-muted-foreground"}`} />
             </Link>
           ) : (
             <button className={cls}>
-              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-muted-foreground"}`} />
             </button>
           )}
           {item.badge != null && (
@@ -469,8 +469,8 @@ function NavItem({
   /* ── Expanded: icon + label ── */
   const rowCls = `w-full flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[13px] font-[450] transition-colors ${
     active
-      ? "bg-pine/8 text-gray-900"
-      : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+      ? "bg-pine/8 text-foreground"
+      : "text-muted-foreground hover:bg-muted hover:text-foreground"
   }`;
 
   const rowContent = (icon: React.ReactNode, label: string, badge?: string | number, chevron?: React.ReactNode) => (
@@ -479,7 +479,7 @@ function NavItem({
       <span className="flex-1 text-left truncate">{label}</span>
       {badge != null && (
         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${
-          active ? "bg-pine/15 text-pine" : "bg-gray-100 text-gray-500"
+          active ? "bg-pine/15 text-pine" : "bg-muted text-muted-foreground"
         }`}>
           {badge}
         </span>
@@ -493,18 +493,18 @@ function NavItem({
       {hasChildren ? (
         <button onClick={onToggle} className={rowCls}>
           {rowContent(
-            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-gray-400"}`} />,
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-muted-foreground"}`} />,
             item.label,
             item.badge,
             isOpen
-              ? <ChevronDown className="w-3 h-3 text-gray-300 shrink-0" />
-              : <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />,
+              ? <ChevronDown className="w-3 h-3 text-muted-foreground shrink-0" />
+              : <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" />,
           )}
         </button>
       ) : item.href ? (
         <Link to={item.href} className={rowCls}>
           {rowContent(
-            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-gray-400"}`} />,
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-muted-foreground"}`} />,
             item.label,
             item.badge,
           )}
@@ -512,7 +512,7 @@ function NavItem({
       ) : (
         <button className={rowCls}>
           {rowContent(
-            <Icon className="w-4 h-4 shrink-0 text-gray-400" />,
+            <Icon className="w-4 h-4 shrink-0 text-muted-foreground" />,
             item.label,
             item.badge,
           )}
@@ -524,12 +524,12 @@ function NavItem({
         <ul className="mt-1 ml-4 space-y-0.5 pb-1">
           {item.children!.map((c, idx) => {
             const isLast = idx === item.children!.length - 1;
-            const childCls = "w-full flex items-center gap-2 pr-2 py-[7px] text-[12px] transition-colors text-gray-400 hover:text-gray-700 hover:bg-gray-50 rounded-lg text-left";
+            const childCls = "w-full flex items-center gap-2 pr-2 py-[7px] text-[12px] transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg text-left";
             const childContent = (
               <>
                 <span className="flex-1 truncate">{c.label}</span>
                 {c.badge != null && (
-                  <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full leading-none shrink-0">
+                  <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full leading-none shrink-0">
                     {c.badge}
                   </span>
                 )}
@@ -538,10 +538,10 @@ function NavItem({
             return (
               <li key={c.label} className="relative pl-[26px]">
                 {/* Rounded-corner L: vertical (top→mid) + horizontal arm, curved at junction */}
-                <div className="pointer-events-none absolute left-[5px] top-0 h-[calc(50%+1px)] w-[14px] border-l-[1.5px] border-b-[1.5px] border-gray-200 rounded-bl-[6px]" />
+                <div className="pointer-events-none absolute left-[5px] top-0 h-[calc(50%+1px)] w-[14px] border-l-[1.5px] border-b-[1.5px] border-border rounded-bl-[6px]" />
                 {/* Vertical extension below midpoint (connects to next sibling) */}
                 {!isLast && (
-                  <div className="pointer-events-none absolute left-[5px] top-1/2 bottom-0 w-[1.5px] bg-gray-200" />
+                  <div className="pointer-events-none absolute left-[5px] top-1/2 bottom-0 w-[1.5px] bg-border" />
                 )}
                 {c.href
                   ? <Link to={c.href} className={childCls}>{childContent}</Link>
