@@ -108,6 +108,7 @@ function KpiGrid() {
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
       <KpiDouble
         icon={Users}
+        tone="pine"
         left={{ label: "Registered users", value: "184,203", delta: "+2.4%", trend: "up", sub: "12,842 active today" }}
         right={{ label: "New signups (24h)", value: "1,284", delta: "+6.1%", trend: "up", sub: "812 verified" }}
       />
@@ -116,12 +117,14 @@ function KpiGrid() {
       <Kpi icon={RevenueIcon} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
       <KpiDouble
         icon={ArrowLeftRight}
+        tone="pine"
         left={{ label: "Deposits today", value: "MWK 1.42B", delta: "+8.2%", trend: "up", sub: "3,102 txns" }}
         right={{ label: "Withdrawals today", value: "MWK 942M", delta: "-3.6%", trend: "down", sub: "1,984 txns" }}
       />
       <Kpi icon={Landmark} label="AUM" value="MWK 812.4B" delta="+1.8%" trend="up" sub="30-day change" />
       <KpiDouble
         icon={ShieldAlert}
+        tone="amber"
         left={{ label: "Pending approvals", value: "46", delta: "urgent", trend: "flat", sub: "12 KYC · 9 payouts" }}
         right={{ label: "Risk alerts", value: "7", delta: "review", trend: "flat", sub: "AML · velocity · IP" }}
       />
@@ -151,8 +154,8 @@ function Kpi({
   return (
     <div className="rounded-xl bg-card border border-border p-4 flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <div className="w-9 h-9 flex items-center justify-center text-muted-foreground">
-          <Icon className="w-4.5 h-4.5" />
+        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${toneMap}`}>
+          <Icon className="w-4 h-4" />
         </div>
         <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
           <TrendIcon className="w-3 h-3" /> {delta}
@@ -171,11 +174,14 @@ function KpiDouble({
   icon: Icon,
   left,
   right,
+  tone = "pine",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   left:  { label: string; value: string; delta: string; trend: "up" | "down" | "flat"; sub: string };
   right: { label: string; value: string; delta: string; trend: "up" | "down" | "flat"; sub: string };
+  tone?: "pine" | "amber" | "rose";
 }) {
+  const toneMap = { pine: "text-pine bg-pine/10", amber: "text-amber bg-amber/10", rose: "text-rose bg-rose/10" }[tone];
   function Side({ stat }: { stat: typeof left }) {
     const trendMap = {
       up: "text-pine",
@@ -198,8 +204,8 @@ function KpiDouble({
   }
   return (
     <div className="col-span-2 rounded-xl bg-card border border-border p-4 flex gap-4 items-start">
-      <div className="w-9 h-9 flex items-center justify-center text-muted-foreground shrink-0">
-        <Icon className="w-4.5 h-4.5" />
+      <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${toneMap}`}>
+        <Icon className="w-4 h-4" />
       </div>
       <Side stat={left} />
       <div className="w-px self-stretch bg-border shrink-0" />
