@@ -290,21 +290,6 @@ function Sidebar({
         )}
       </div>
 
-      {/* Search */}
-      <div className={`shrink-0 border-b border-sidebar-border ${collapsed ? "flex justify-center py-3" : "px-3 py-3"}`}>
-        {collapsed ? (
-          <button className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
-            <Search className="w-4 h-4" />
-          </button>
-        ) : (
-          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
-            <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-            <span className="flex-1 text-[13px] text-gray-400 select-none">Search</span>
-            <span className="text-[10px] border border-gray-200 rounded px-1.5 py-0.5 text-gray-400 leading-none">⌘K</span>
-          </div>
-        )}
-      </div>
-
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto scrollbar-hide py-2">
         {sectionOrder.map((section) => {
