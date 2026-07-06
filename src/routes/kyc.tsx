@@ -132,7 +132,6 @@ const filterTabs: Tab[] = [
   { key: "rejected", label: "Rejected", icon: XCircle, filter: (a) => a.status === "rejected" },
   { key: "additional", label: "Additional Docs", icon: FilePlus, filter: (a) => a.status === "additional_docs" },
   { key: "pending", label: "Pending Review", icon: Clock, filter: (a) => a.status === "pending" },
-  { key: "face", label: "Face Verification", icon: Camera, filter: (a) => a.faceMatchScore < 80 || a.status === "pending" },
   { key: "ocr", label: "OCR Results", icon: ScanLine, filter: (a) => a.ocrConfidence < 85 },
 ];
 
