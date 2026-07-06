@@ -43,13 +43,7 @@ export const nav: NavGroup[] = [
     ],
   },
   {
-    section: "CLIENTS", icon: FileCheck2, label: "KYC Management", badge: 27,
-    children: [
-      { label: "Pending Reviews", badge: 27 }, { label: "Documents" }, { label: "Face Verification" },
-      { label: "OCR Results" }, { label: "Approved" }, { label: "Rejected" },
-      { label: "Additional Docs" }, { label: "Verification History" }, { label: "Manual Verification" },
-      { label: "Audit Trail" },
-    ],
+    section: "CLIENTS", icon: FileCheck2, label: "KYC Management", href: "/kyc", badge: 27,
   },
   {
     section: "MARKETS", icon: CandlestickChart, label: "Trading Operations",
