@@ -72,10 +72,10 @@ function fmtNum(n: number) {
 /* ─────────────────────────── config maps ─────────────────────────── */
 
 const typeConfig: Record<NotifType, { icon: React.ComponentType<{ className?: string }>; iconCls: string; dotCls: string }> = {
-  alert:   { icon: AlertTriangle, iconCls: "text-rose",              dotCls: "bg-rose" },
-  warning: { icon: AlertTriangle, iconCls: "text-amber",             dotCls: "bg-amber" },
-  success: { icon: CheckCircle2,  iconCls: "text-pine",              dotCls: "bg-pine" },
-  info:    { icon: Bell,          iconCls: "text-muted-foreground",  dotCls: "bg-blue-500" },
+  alert:   { icon: AlertTriangle, iconCls: "text-muted-foreground", dotCls: "bg-rose" },
+  warning: { icon: AlertTriangle, iconCls: "text-muted-foreground", dotCls: "bg-amber" },
+  success: { icon: CheckCircle2,  iconCls: "text-muted-foreground", dotCls: "bg-pine" },
+  info:    { icon: Bell,          iconCls: "text-muted-foreground", dotCls: "bg-blue-500" },
 };
 
 const channelConfig: Record<Channel, { icon: React.ComponentType<{ className?: string }>; label: string; cls: string }> = {
