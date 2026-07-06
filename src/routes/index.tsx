@@ -8,6 +8,7 @@ import {
 import {
   AreaChart, Area, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid,
   ResponsiveContainer, Tooltip, PieChart, Pie, Cell,
+  RadialBarChart, RadialBar,
 } from "recharts";
 import { AdminShell, Card } from "@/components/admin-shell";
 
@@ -38,9 +39,13 @@ const revenueData = Array.from({ length: 14 }, (_, i) => ({
 
 const totalDeposits = revenueData.reduce((s, d) => s + d.deposits, 0);
 const totalWithdrawals = revenueData.reduce((s, d) => s + d.withdrawals, 0);
-const flowData = [
-  { name: "Deposits", value: totalDeposits, color: "#45B369" },
-  { name: "Withdrawals", value: totalWithdrawals, color: "#F87171" },
+const totalTradeVolume = volumeData.reduce((s, d) => s + d.volume, 0);
+
+const _flowMax = Math.max(totalDeposits, totalWithdrawals, totalTradeVolume);
+const radialFlowData = [
+  { name: "Trades",      raw: totalTradeVolume, value: Math.round((totalTradeVolume / _flowMax) * 100), fill: "#60A5FA" },
+  { name: "Withdrawals", raw: totalWithdrawals,  value: Math.round((totalWithdrawals  / _flowMax) * 100), fill: "#F87171" },
+  { name: "Deposits",    raw: totalDeposits,     value: Math.round((totalDeposits     / _flowMax) * 100), fill: "#45B369" },
 ];
 
 const allocation = [
@@ -231,58 +236,48 @@ function SystemHealthCard() {
 }
 
 function RevenueCard() {
-  const total = totalDeposits + totalWithdrawals;
-  const depositPct = Math.round((totalDeposits / total) * 100);
-  const withdrawalPct = 100 - depositPct;
   return (
-    <Card title="Deposits vs Withdrawals" subtitle="Last 14 days · MWK millions">
-      <div className="flex flex-col gap-4">
-        <div className="h-44 w-full">
+    <Card title="Flow breakdown" subtitle="Last 14 days · MWK millions">
+      <div className="flex flex-col gap-3">
+        <div className="h-48 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={flowData}
-                cx="50%"
-                cy="50%"
-                innerRadius={52}
-                outerRadius={78}
-                paddingAngle={3}
+            <RadialBarChart
+              cx="50%"
+              cy="50%"
+              innerRadius="25%"
+              outerRadius="95%"
+              barSize={10}
+              data={radialFlowData}
+              startAngle={90}
+              endAngle={-270}
+            >
+              <RadialBar
                 dataKey="value"
-                startAngle={90}
-                endAngle={-270}
-              >
-                {flowData.map((entry) => (
-                  <Cell key={entry.name} fill={entry.color} />
-                ))}
-              </Pie>
+                cornerRadius={6}
+                background={{ fill: "oklch(0.94 0.005 150)" }}
+              />
               <Tooltip
-                formatter={(value: number) => [`MWK ${(value / 1000).toFixed(1)}B`, ""]}
+                formatter={(_: number, __: string, props: { payload?: { name: string; raw: number } }) =>
+                  [`MWK ${((props.payload?.raw ?? 0) / 1000).toFixed(1)}B`, props.payload?.name ?? ""]
+                }
                 contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.92 0.008 150)", fontSize: 12 }}
               />
-            </PieChart>
+            </RadialBarChart>
           </ResponsiveContainer>
         </div>
         <div className="flex flex-col gap-2">
-          {flowData.map((entry) => (
+          {[...radialFlowData].reverse().map((entry) => (
             <div key={entry.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: entry.color }} />
+                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: entry.fill }} />
                 <span className="text-xs text-muted-foreground">{entry.name}</span>
               </div>
-              <div className="text-right">
-                <span className="text-sm font-semibold">MWK {(entry.value / 1000).toFixed(1)}B</span>
-                <span className="text-xs text-muted-foreground ml-1.5">
-                  {entry.name === "Deposits" ? depositPct : withdrawalPct}%
-                </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">MWK {(entry.raw / 1000).toFixed(1)}B</span>
+                <span className="text-xs text-muted-foreground w-8 text-right">{entry.value}%</span>
               </div>
             </div>
           ))}
-          <div className="flex items-center justify-between pt-2 border-t border-border">
-            <span className="text-xs text-muted-foreground">Net flow</span>
-            <span className={`text-sm font-semibold ${totalDeposits > totalWithdrawals ? "text-green-600" : "text-red-500"}`}>
-              +MWK {((totalDeposits - totalWithdrawals) / 1000).toFixed(1)}B
-            </span>
-          </div>
         </div>
       </div>
     </Card>
