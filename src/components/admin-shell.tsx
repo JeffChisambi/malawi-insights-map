@@ -269,7 +269,7 @@ function Sidebar({
           <div className="text-[10px] tracking-[0.15em] opacity-70">BROKER ADMIN</div>
         </div>
       </div>
-      <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+      <nav className="flex-1 overflow-y-auto scrollbar-hide px-3 py-3 space-y-4">
         {sectionOrder.map((section) => {
           const items = nav.filter((n) => n.section === section);
           if (!items.length) return null;
