@@ -109,7 +109,6 @@ function UsersPage() {
   const initialTab = tabs.find((t) => t.key === search.tab)?.key ?? "all";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [q] = useState("");
-  const [kycFilter, setKycFilter] = useState<"all" | Kyc>("verified");
   const [riskFilter, setRiskFilter] = useState<"all" | Risk>("all");
   const [drawerUser, setDrawerUser] = useState<UserRow | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
@@ -118,11 +117,10 @@ function UsersPage() {
     const tab = tabs.find((t) => t.key === activeTab)!;
     return users.filter((u) =>
       tab.filter(u) &&
-      (kycFilter === "all" || u.kyc === kycFilter) &&
       (riskFilter === "all" || u.risk === riskFilter) &&
       (!q || (u.name + u.email + u.id + u.phone).toLowerCase().includes(q.toLowerCase()))
     );
-  }, [activeTab, kycFilter, riskFilter, q]);
+  }, [activeTab, riskFilter, q]);
 
   const toggle = (id: string) => {
     const next = new Set(checked);
@@ -138,7 +136,6 @@ function UsersPage() {
         <Tabs
           tabs={tabs} active={activeTab} onChange={setActiveTab}
           counts={tabs.map((t) => users.filter(t.filter).length)}
-          kycFilter={kycFilter} setKycFilter={setKycFilter}
         />
         <Toolbar
           riskFilter={riskFilter} setRiskFilter={setRiskFilter}
@@ -231,21 +228,14 @@ function UserStats() {
 }
 
 function Tabs({
-  tabs, active, onChange, counts, kycFilter, setKycFilter,
+  tabs, active, onChange, counts,
 }: {
   tabs: { key: string; label: string }[];
   active: string;
   onChange: (k: string) => void;
   counts: number[];
-  kycFilter: "all" | Kyc;
-  setKycFilter: (v: "all" | Kyc) => void;
 }) {
   const activeTab = tabs.find((t) => t.key === active);
-  const kycOptions: [string, string][] = [
-    ["verified", "Verified"], ["tier2", "Tier 2"],
-    ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"],
-  ];
-  const insertIndex = 2;
   return (
     <>
       {/* ── Dropdown on small screens ── */}
@@ -268,7 +258,6 @@ function Tabs({
             ))}
           </select>
         </label>
-        <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
       </div>
 
       {/* ── Tab strip on sm+ screens ── */}
@@ -291,9 +280,6 @@ function Tabs({
             </button>
           );
         })}
-        <div className="ml-auto flex items-center py-2">
-          <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
-        </div>
       </div>
     </>
   );
