@@ -1,5 +1,5 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { z } from "zod";
 import {
   Search, Filter, Download, UserPlus, MoreHorizontal, Shield, ShieldAlert,
@@ -112,7 +112,7 @@ function UsersPage() {
   const [q] = useState("");
   const [kycFilter, setKycFilter] = useState<"all" | Kyc>("all");
   const [riskFilter, setRiskFilter] = useState<"all" | Risk>("all");
-  const [selected, setSelected] = useState<UserRow | null>(users[0]);
+  const [drawerUser, setDrawerUser] = useState<UserRow | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
 
   const filtered = useMemo(() => {
@@ -135,33 +135,25 @@ function UsersPage() {
     <AdminShell activeLabel="User Management" eyebrow="Clients" title="User Management">
       <UserStats />
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <div className="xl:col-span-2 space-y-5">
-          <Card>
-            <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} counts={tabs.map((t) => users.filter(t.filter).length)} />
-            <Toolbar
-              kycFilter={kycFilter} setKycFilter={setKycFilter}
-              riskFilter={riskFilter} setRiskFilter={setRiskFilter}
-              selectedCount={checked.size}
-            />
-            <UsersTable
-              rows={filtered}
-              checked={checked}
-              onCheck={toggle}
-              onSelectAll={() => setChecked(new Set(filtered.map((r) => r.id)))}
-              onClear={() => setChecked(new Set())}
-              selectedId={selected?.id}
-              onOpen={setSelected}
-            />
-            <TableFooter total={filtered.length} />
-          </Card>
-        </div>
-        <div className="space-y-5">
-          {selected ? <UserDetails user={selected} /> : (
-            <Card><div className="text-sm text-muted-foreground">Select a user to see full 360° profile.</div></Card>
-          )}
-        </div>
-      </div>
+      <Card>
+        <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} counts={tabs.map((t) => users.filter(t.filter).length)} />
+        <Toolbar
+          kycFilter={kycFilter} setKycFilter={setKycFilter}
+          riskFilter={riskFilter} setRiskFilter={setRiskFilter}
+          selectedCount={checked.size}
+        />
+        <UsersTable
+          rows={filtered}
+          checked={checked}
+          onCheck={toggle}
+          onSelectAll={() => setChecked(new Set(filtered.map((r) => r.id)))}
+          onClear={() => setChecked(new Set())}
+          onOpenDrawer={setDrawerUser}
+        />
+        <TableFooter total={filtered.length} />
+      </Card>
+
+      {drawerUser && <UserDrawer user={drawerUser} onClose={() => setDrawerUser(null)} />}
     </AdminShell>
   );
 }
@@ -322,15 +314,14 @@ function BulkBtn({
 /* -------------------- table -------------------- */
 
 function UsersTable({
-  rows, checked, onCheck, onSelectAll, onClear, selectedId, onOpen,
+  rows, checked, onCheck, onSelectAll, onClear, onOpenDrawer,
 }: {
   rows: UserRow[];
   checked: Set<string>;
   onCheck: (id: string) => void;
   onSelectAll: () => void;
   onClear: () => void;
-  selectedId?: string;
-  onOpen: (u: UserRow) => void;
+  onOpenDrawer: (u: UserRow) => void;
 }) {
   const allChecked = rows.length > 0 && rows.every((r) => checked.has(r.id));
   return (
@@ -359,14 +350,8 @@ function UsersTable({
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr
-              key={r.id}
-              onClick={() => onOpen(r)}
-              className={`border-b border-border cursor-pointer transition-colors ${
-                selectedId === r.id ? "bg-pine/5" : "hover:bg-muted/30"
-              }`}
-            >
-              <td className="pl-5 py-3" onClick={(e) => e.stopPropagation()}>
+            <tr key={r.id} className="border-b border-border hover:bg-muted/30 transition-colors">
+              <td className="pl-5 py-3">
                 <input
                   type="checkbox"
                   checked={checked.has(r.id)}
@@ -390,8 +375,11 @@ function UsersTable({
               <td className="py-3 text-right font-mono text-muted-foreground">MWK {MWK(r.cash)}</td>
               <td className="py-3 text-right">{r.trades30d}</td>
               <td className="py-3 text-xs text-muted-foreground">{r.lastLogin}</td>
-              <td className="pr-5 py-3 text-right" onClick={(e) => e.stopPropagation()}>
-                <button className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center">
+              <td className="pr-5 py-3 text-right">
+                <button
+                  onClick={() => onOpenDrawer(r)}
+                  className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center"
+                >
                   <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                 </button>
               </td>
@@ -472,13 +460,35 @@ function TableFooter({ total }: { total: number }) {
   );
 }
 
+/* -------------------- drawer -------------------- */
+
+function UserDrawer({ user, onClose }: { user: UserRow; onClose: () => void }) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" onClick={onClose} />
+      {/* Panel */}
+      <div className="relative w-full max-w-sm bg-background shadow-2xl flex flex-col overflow-hidden border-l border-border">
+        <UserDetails user={user} onClose={onClose} />
+      </div>
+    </div>
+  );
+}
+
 /* -------------------- user 360 panel -------------------- */
 
-function UserDetails({ user }: { user: UserRow }) {
+function UserDetails({ user, onClose }: { user: UserRow; onClose?: () => void }) {
   const [tab, setTab] = useState<"profile" | "kyc" | "devices" | "banks" | "activity">("profile");
   return (
-    <>
-      <Card>
+    <div className="flex flex-col h-full overflow-y-auto scrollbar-thin-pine">
+      {/* Header */}
+      <div className="p-5 border-b border-border shrink-0">
         <div className="flex items-start gap-3">
           <Avatar name={user.name} />
           <div className="min-w-0 flex-1">
@@ -493,9 +503,11 @@ function UserDetails({ user }: { user: UserRow }) {
               <span>Joined {user.joined}</span>
             </div>
           </div>
-          <button className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
+          {onClose && (
+            <button onClick={onClose} className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center text-muted-foreground">
+              <XCircle className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-2">
@@ -507,37 +519,39 @@ function UserDetails({ user }: { user: UserRow }) {
           <QuickAction icon={Ban} label="Suspend" tone="rose" />
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
+        <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
           <MiniStat icon={Wallet} label="Portfolio" value={`MWK ${MWK(user.aum)}`} />
           <MiniStat icon={Landmark} label="Cash" value={`MWK ${MWK(user.cash)}`} />
           <MiniStat icon={Activity} label="30d trades" value={String(user.trades30d)} />
           <MiniStat icon={Shield} label="MFA" value={user.mfa ? "Enabled" : "Off"} tone={user.mfa ? "pine" : "amber"} />
         </div>
+      </div>
 
-        <div className="mt-5 -mx-5 border-b border-border flex items-center gap-1 px-5 overflow-x-auto">
-          {(["profile", "kyc", "devices", "banks", "activity"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`relative py-2.5 text-xs font-medium capitalize px-2 ${
-                tab === t ? "text-pine" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t === "kyc" ? "KYC" : t}
-              {tab === t && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-pine rounded-full" />}
-            </button>
-          ))}
-        </div>
+      {/* Tabs */}
+      <div className="border-b border-border flex items-center gap-1 px-5 overflow-x-auto shrink-0">
+        {(["profile", "kyc", "devices", "banks", "activity"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`relative py-2.5 text-xs font-medium capitalize px-2 ${
+              tab === t ? "text-pine" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t === "kyc" ? "KYC" : t}
+            {tab === t && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-pine rounded-full" />}
+          </button>
+        ))}
+      </div>
 
-        <div className="mt-4">
-          {tab === "profile" && <ProfileTab user={user} />}
-          {tab === "kyc" && <KycTab user={user} />}
-          {tab === "devices" && <DevicesTab user={user} />}
-          {tab === "banks" && <BanksTab user={user} />}
-          {tab === "activity" && <ActivityTab user={user} />}
-        </div>
-      </Card>
-    </>
+      {/* Tab content */}
+      <div className="p-5 flex-1">
+        {tab === "profile" && <ProfileTab user={user} />}
+        {tab === "kyc" && <KycTab user={user} />}
+        {tab === "devices" && <DevicesTab user={user} />}
+        {tab === "banks" && <BanksTab user={user} />}
+        {tab === "activity" && <ActivityTab user={user} />}
+      </div>
+    </div>
   );
 }
 
