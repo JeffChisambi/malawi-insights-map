@@ -91,7 +91,6 @@ const users: UserRow[] = Array.from({ length: 42 }, (_, i) => {
 const tabs: { key: string; label: string; filter: (u: UserRow) => boolean }[] = [
   { key: "all", label: "All Users", filter: () => true },
   { key: "active", label: "Active", filter: (u) => u.status === "active" },
-  { key: "pending", label: "Pending KYC", filter: (u) => u.kyc === "pending" || u.status === "pending" },
   { key: "frozen", label: "Frozen", filter: (u) => u.status === "frozen" },
   { key: "suspended", label: "Suspended", filter: (u) => u.status === "suspended" },
   { key: "closed", label: "Closed", filter: (u) => u.status === "closed" },
@@ -136,9 +135,12 @@ function UsersPage() {
       <UserStats />
 
       <Card>
-        <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} counts={tabs.map((t) => users.filter(t.filter).length)} />
-        <Toolbar
+        <Tabs
+          tabs={tabs} active={activeTab} onChange={setActiveTab}
+          counts={tabs.map((t) => users.filter(t.filter).length)}
           kycFilter={kycFilter} setKycFilter={setKycFilter}
+        />
+        <Toolbar
           riskFilter={riskFilter} setRiskFilter={setRiskFilter}
           selectedCount={checked.size}
         />
@@ -229,19 +231,26 @@ function UserStats() {
 }
 
 function Tabs({
-  tabs, active, onChange, counts,
+  tabs, active, onChange, counts, kycFilter, setKycFilter,
 }: {
   tabs: { key: string; label: string }[];
   active: string;
   onChange: (k: string) => void;
   counts: number[];
+  kycFilter: "all" | Kyc;
+  setKycFilter: (v: "all" | Kyc) => void;
 }) {
   const activeTab = tabs.find((t) => t.key === active);
+  const kycOptions: [string, string][] = [
+    ["all", "All KYC"], ["verified", "Verified"], ["tier2", "Tier 2"],
+    ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"],
+  ];
+  const insertIndex = 2;
   return (
     <>
       {/* ── Dropdown on small screens ── */}
-      <div className="sm:hidden -mt-2 -mx-5 px-5 pb-3 border-b border-border">
-        <label className="relative flex items-center gap-2 h-9 pl-3 pr-8 rounded-lg border border-border text-sm bg-background cursor-pointer w-full">
+      <div className="sm:hidden -mt-2 -mx-5 px-5 pb-3 border-b border-border flex items-center gap-2">
+        <label className="relative flex items-center gap-2 h-9 pl-3 pr-8 rounded-lg border border-border text-sm bg-background cursor-pointer flex-1">
           <span className="font-medium text-foreground truncate flex-1">
             {activeTab?.label}
           </span>
@@ -259,6 +268,7 @@ function Tabs({
             ))}
           </select>
         </label>
+        <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
       </div>
 
       {/* ── Tab strip on sm+ screens ── */}
@@ -266,19 +276,25 @@ function Tabs({
         {tabs.map((t, i) => {
           const isActive = t.key === active;
           return (
-            <button
-              key={t.key}
-              onClick={() => onChange(t.key)}
-              className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
-                isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t.label}
-              <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
-                {counts[i]}
-              </span>
-              {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
-            </button>
+            <Fragment key={t.key}>
+              {i === insertIndex && (
+                <div className="flex items-center py-2">
+                  <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)} options={kycOptions} />
+                </div>
+              )}
+              <button
+                onClick={() => onChange(t.key)}
+                className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
+                  isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+                <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
+                  {counts[i]}
+                </span>
+                {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
+              </button>
+            </Fragment>
           );
         })}
       </div>
@@ -287,19 +303,15 @@ function Tabs({
 }
 
 function Toolbar({
-  kycFilter, setKycFilter,
   riskFilter, setRiskFilter,
   selectedCount,
 }: {
-  kycFilter: "all" | Kyc; setKycFilter: (v: "all" | Kyc) => void;
   riskFilter: "all" | Risk; setRiskFilter: (v: "all" | Risk) => void;
   selectedCount: number;
 }) {
   return (
     <div className="mt-4 flex flex-wrap items-center gap-2">
 
-      <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)}
-        options={[["all", "All KYC"], ["verified", "Verified"], ["tier2", "Tier 2"], ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"]]} />
       <SelectPill icon={ShieldAlert} value={riskFilter} onChange={(v) => setRiskFilter(v as any)}
         options={[["all", "All risk"], ["low", "Low"], ["medium", "Medium"], ["high", "High"]]} />
 
