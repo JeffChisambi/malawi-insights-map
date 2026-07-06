@@ -108,7 +108,7 @@ export const nav: NavGroup[] = [
     ],
   },
   {
-    section: "ENGAGEMENT", icon: Bell, label: "Notifications",
+    section: "ENGAGEMENT", icon: Bell, label: "Notifications", href: "/notifications",
     children: [
       { label: "Push" }, { label: "Email Campaigns" }, { label: "SMS" }, { label: "Broadcasts" },
       { label: "Scheduled" }, { label: "Delivery Status" }, { label: "Retry Failed" },

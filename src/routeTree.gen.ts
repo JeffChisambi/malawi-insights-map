@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteImport } from './routes/users'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as KycRouteImport } from './routes/kyc'
 import { Route as IndexRouteImport } from './routes/index'
 
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KycRoute = KycRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/kyc': typeof KycRoute
+  '/notifications': typeof NotificationsRoute
   '/users': typeof UsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/kyc': typeof KycRoute
+  '/notifications': typeof NotificationsRoute
   '/users': typeof UsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/kyc': typeof KycRoute
+  '/notifications': typeof NotificationsRoute
   '/users': typeof UsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/kyc' | '/users'
+  fullPaths: '/' | '/kyc' | '/notifications' | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/kyc' | '/users'
-  id: '__root__' | '/' | '/kyc' | '/users'
+  to: '/' | '/kyc' | '/notifications' | '/users'
+  id: '__root__' | '/' | '/kyc' | '/notifications' | '/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   KycRoute: typeof KycRoute
+  NotificationsRoute: typeof NotificationsRoute
   UsersRoute: typeof UsersRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kyc': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   KycRoute: KycRoute,
+  NotificationsRoute: NotificationsRoute,
   UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
