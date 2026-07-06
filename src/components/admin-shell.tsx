@@ -6,8 +6,18 @@ import {
   Wallet, BookOpen, CreditCard, Building2, LineChart as LineChartIcon, Newspaper,
   Bell, Star, BarChart3, Headphones, AlertTriangle, Scale, KeyRound, UserCog,
   Activity, ListChecks, History, Settings, Plug, DatabaseBackup,
-  ChevronDown, ChevronRight, ChevronLeft, Search, CircleUser, Clock, Sun, Moon,
+  ChevronDown, ChevronRight, ChevronLeft, Search, CircleUser, Clock, Sun, Moon, Check,
 } from "lucide-react";
+
+const TIME_RANGES = [
+  { label: "Last 1 hour",    value: "1h",  short: "Last 1h"  },
+  { label: "Last 6 hours",   value: "6h",  short: "Last 6h"  },
+  { label: "Last 12 hours",  value: "12h", short: "Last 12h" },
+  { label: "Last 24 hours",  value: "24h", short: "Last 24h" },
+  { label: "Last 7 days",    value: "7d",  short: "Last 7d"  },
+  { label: "Last 30 days",   value: "30d", short: "Last 30d" },
+  { label: "Last 90 days",   value: "90d", short: "Last 90d" },
+];
 
 export type NavChild = { label: string; href?: string; badge?: string | number };
 export type NavGroup = {
@@ -542,6 +552,20 @@ function NavItem({
 function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
   const [dark, setDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [range, setRange] = useState("24h");
+  const [rangeOpen, setRangeOpen] = useState(false);
+  const rangeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!rangeOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (rangeRef.current && !rangeRef.current.contains(e.target as Node)) {
+        setRangeOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [rangeOpen]);
 
   useEffect(() => {
     const stored = localStorage.getItem("pine-theme");
@@ -580,10 +604,64 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <button className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border border-border text-sm hover:bg-muted/40">
-          <Clock className="w-4 h-4" /> Last 24h
-          <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-        </button>
+        {/* ── Time-range picker ── */}
+        <div ref={rangeRef} className="relative hidden md:block">
+          <button
+            onClick={() => setRangeOpen((o) => !o)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
+              rangeOpen
+                ? "border-pine/40 bg-pine/5 text-pine"
+                : "border-border hover:bg-muted/40 text-foreground"
+            }`}
+          >
+            <Clock className={`w-4 h-4 ${rangeOpen ? "text-pine" : "text-muted-foreground"}`} />
+            {TIME_RANGES.find((r) => r.value === range)?.short ?? "Last 24h"}
+            <ChevronDown
+              className={`w-3.5 h-3.5 opacity-60 transition-transform duration-150 ${rangeOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {rangeOpen && (
+            <div className="absolute right-0 top-full mt-1.5 z-50 w-56 bg-card border border-border rounded-xl shadow-xl overflow-hidden">
+              {/* Header */}
+              <div className="px-3.5 pt-3 pb-2">
+                <span className="text-[10px] font-semibold tracking-[0.14em] text-muted-foreground">
+                  TIME RANGE
+                </span>
+              </div>
+
+              {/* Options */}
+              <div className="pb-2">
+                {TIME_RANGES.map((r) => {
+                  const selected = range === r.value;
+                  return (
+                    <button
+                      key={r.value}
+                      onClick={() => { setRange(r.value); setRangeOpen(false); }}
+                      className={`w-full flex items-center gap-2.5 px-3.5 py-[7px] text-[13px] transition-colors text-left ${
+                        selected
+                          ? "bg-pine/6 text-pine font-medium"
+                          : "text-foreground hover:bg-muted"
+                      }`}
+                    >
+                      {/* Dot indicator */}
+                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${selected ? "bg-pine" : "bg-border"}`} />
+                      <span className="flex-1">{r.label}</span>
+                      {selected && <Check className="w-3.5 h-3.5 text-pine shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Footer hint */}
+              <div className="px-3.5 py-2.5 border-t border-border bg-muted/30">
+                <p className="text-[11px] text-muted-foreground">
+                  Applies to all dashboard metrics
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
         <button
           onClick={() => setDark((d) => !d)}
           className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"
