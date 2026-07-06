@@ -8,7 +8,7 @@ import {
 import {
   AreaChart, Area, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid,
   ResponsiveContainer, Tooltip, PieChart, Pie, Cell,
-  RadialBarChart, RadialBar,
+  RadialBarChart, RadialBar, PolarAngleAxis,
 } from "recharts";
 import { AdminShell, Card } from "@/components/admin-shell";
 
@@ -302,6 +302,7 @@ function RevenueCard() {
               startAngle={90}
               endAngle={-270}
             >
+              <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
               <RadialBar
                 dataKey="value"
                 cornerRadius={6}
