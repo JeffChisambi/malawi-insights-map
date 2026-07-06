@@ -199,7 +199,7 @@ function SummaryCard({
   label: string; value: number; sub: string; accent?: boolean;
 }) {
   return (
-    <div className={`rounded-xl bg-card border p-4 ${accent ? "border-rose/40" : "border-border"}`}>
+    <div className="rounded-xl bg-card border border-border p-4">
       <div className="flex items-center justify-between mb-3">
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${accent ? "bg-rose/10" : "bg-muted"}`}>
           <Icon className={`w-4 h-4 ${accent ? "text-rose" : "text-muted-foreground"}`} />
