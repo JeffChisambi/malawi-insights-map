@@ -203,7 +203,7 @@ function KpiDouble({
     const TrendIcon = stat.trend === "up" ? TrendingUp : stat.trend === "down" ? TrendingDown : Clock;
     return (
       <div className="flex-1 min-w-0 flex flex-col gap-2">
-        <span className={`self-start inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
+        <span className={`self-end inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
           <TrendIcon className="w-3 h-3" /> {stat.delta}
         </span>
         <div>

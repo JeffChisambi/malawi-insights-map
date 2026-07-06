@@ -192,7 +192,7 @@ function UserStats() {
           <Fragment key={it.label}>
             {i > 0 && <div className="w-px self-stretch bg-border shrink-0" />}
             <div className="flex-1 min-w-0 flex flex-col gap-2">
-              <span className="self-start inline-flex items-center gap-1 text-[11px] font-medium text-pine">
+              <span className="self-end inline-flex items-center gap-1 text-[11px] font-medium text-pine">
                 <TrendingUp className="w-3 h-3" /> {it.trend}
               </span>
               <div>
