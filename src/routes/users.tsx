@@ -400,12 +400,10 @@ function UsersTable({
             </th>
             <th className="py-2 text-left font-medium">User</th>
             <th className="py-2 text-left font-medium">Status</th>
-            <th className="py-2 text-left font-medium">KYC</th>
             <th className="py-2 text-left font-medium">Risk</th>
             <th className="py-2 text-right font-medium">AUM</th>
             <th className="py-2 text-right font-medium">Cash</th>
             <th className="py-2 text-right font-medium">30d trades</th>
-            <th className="py-2 text-left font-medium">Last login</th>
             <th className="pr-5 py-2"></th>
           </tr>
         </thead>
@@ -425,17 +423,15 @@ function UsersTable({
                   <Avatar name={r.name} />
                   <div className="min-w-0">
                     <div className="font-medium truncate">{r.name}</div>
-                    <div className="text-xs text-muted-foreground truncate">{r.email} · {r.id}</div>
+                    <div className="text-xs text-muted-foreground truncate">{r.id}</div>
                   </div>
                 </div>
               </td>
               <td className="py-3"><StatusBadge status={r.status} /></td>
-              <td className="py-3"><KycBadge kyc={r.kyc} /></td>
               <td className="py-3"><RiskBadge risk={r.risk} /></td>
               <td className="py-3 text-right font-mono">MWK {MWK(r.aum)}</td>
               <td className="py-3 text-right font-mono text-muted-foreground">MWK {MWK(r.cash)}</td>
               <td className="py-3 text-right">{r.trades30d}</td>
-              <td className="py-3 text-xs text-muted-foreground">{r.lastLogin}</td>
               <td className="pr-5 py-3 text-right">
                 <button
                   onClick={() => onOpenDrawer(r)}
@@ -447,7 +443,7 @@ function UsersTable({
             </tr>
           ))}
           {rows.length === 0 && (
-            <tr><td colSpan={10} className="py-16 text-center text-sm text-muted-foreground">No users match these filters.</td></tr>
+            <tr><td colSpan={8} className="py-16 text-center text-sm text-muted-foreground">No users match these filters.</td></tr>
           )}
         </tbody>
       </table>
