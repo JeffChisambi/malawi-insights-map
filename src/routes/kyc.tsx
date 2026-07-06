@@ -167,28 +167,30 @@ function KycPage() {
       <KycStats />
 
       {/* Tab bar */}
-      <div className="flex items-center gap-0.5 border-b border-border overflow-x-auto scrollbar-hide -mx-8 px-8">
-        {tabs.map((t) => {
-          const Icon = t.icon;
-          const count = applications.filter(t.filter).length;
-          const isActive = t.key === activeTab;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setActiveTab(t.key)}
-              className={`relative flex items-center gap-1.5 whitespace-nowrap px-3 py-3 text-[13px] font-medium transition-colors shrink-0 ${
-                isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              {t.label}
-              <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
-                {count}
-              </span>
-              {isActive && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-pine rounded-full" />}
-            </button>
-          );
-        })}
+      <div className="flex items-center gap-0.5 border-b border-border -mx-8 px-8">
+        <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide">
+          {tabs.map((t) => {
+            const Icon = t.icon;
+            const count = applications.filter(t.filter).length;
+            const isActive = t.key === activeTab;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setActiveTab(t.key)}
+                className={`relative flex items-center gap-1.5 whitespace-nowrap px-3 py-3 text-[13px] font-medium transition-colors shrink-0 ${
+                  isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {t.label}
+                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
+                  {count}
+                </span>
+                {isActive && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-pine rounded-full" />}
+              </button>
+            );
+          })}
+        </div>
         <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
