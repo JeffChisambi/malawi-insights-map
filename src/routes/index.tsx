@@ -42,11 +42,9 @@ const revenueData = Array.from({ length: 14 }, (_, i) => ({
 
 const totalDeposits = revenueData.reduce((s, d) => s + d.deposits, 0);
 const totalWithdrawals = revenueData.reduce((s, d) => s + d.withdrawals, 0);
-const totalTradeVolume = volumeData.reduce((s, d) => s + d.volume, 0);
 
-const _flowMax = Math.max(totalDeposits, totalWithdrawals, totalTradeVolume);
+const _flowMax = Math.max(totalDeposits, totalWithdrawals);
 const radialFlowData = [
-  { name: "Trades",      raw: totalTradeVolume, value: Math.round((totalTradeVolume / _flowMax) * 100), fill: "#60A5FA" },
   { name: "Withdrawals", raw: totalWithdrawals,  value: Math.round((totalWithdrawals  / _flowMax) * 100), fill: "#F87171" },
   { name: "Deposits",    raw: totalDeposits,     value: Math.round((totalDeposits     / _flowMax) * 100), fill: "#45B369" },
 ];
