@@ -419,10 +419,7 @@ function KycRow({ app, idx, onSelect, showDetailColumns }: { app: KycApplication
       <td className="py-3">
         <div className="flex items-center gap-2.5">
           <Initials name={app.name} />
-          <div>
-            <div className="font-medium text-[13px]">{app.name}</div>
-            <div className="text-[11px] text-muted-foreground font-mono">{app.id}</div>
-          </div>
+          <div className="font-medium text-[13px]">{app.name}</div>
         </div>
       </td>
       <td className="py-3 text-[12px] text-muted-foreground">{docTypeLabel[app.docType]}</td>
