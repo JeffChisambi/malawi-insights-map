@@ -27,7 +27,7 @@ export const nav: NavGroup[] = [
       { label: "All Users", href: "/users" },
       { label: "Login History", href: "/users?tab=logins" },
       { label: "Linked Banks", href: "/users?tab=banks" },
-      { label: "Linked Mobile Money", href: "/users?tab=momo" }, { label: "Activity Timeline", href: "/users?tab=activity" },
+      { label: "Activity Timeline", href: "/users?tab=activity" },
       { label: "Export" },
     ],
   },
