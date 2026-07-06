@@ -109,7 +109,7 @@ function UsersPage() {
   const search = useSearch({ from: "/users" });
   const initialTab = tabs.find((t) => t.key === search.tab)?.key ?? "all";
   const [activeTab, setActiveTab] = useState(initialTab);
-  const [q, setQ] = useState("");
+  const [q] = useState("");
   const [kycFilter, setKycFilter] = useState<"all" | Kyc>("all");
   const [riskFilter, setRiskFilter] = useState<"all" | Risk>("all");
   const [selected, setSelected] = useState<UserRow | null>(users[0]);
@@ -140,7 +140,6 @@ function UsersPage() {
           <Card>
             <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} counts={tabs.map((t) => users.filter(t.filter).length)} />
             <Toolbar
-              q={q} setQ={setQ}
               kycFilter={kycFilter} setKycFilter={setKycFilter}
               riskFilter={riskFilter} setRiskFilter={setRiskFilter}
               selectedCount={checked.size}
@@ -247,27 +246,17 @@ function Tabs({
 }
 
 function Toolbar({
-  q, setQ,
   kycFilter, setKycFilter,
   riskFilter, setRiskFilter,
   selectedCount,
 }: {
-  q: string; setQ: (v: string) => void;
   kycFilter: "all" | Kyc; setKycFilter: (v: "all" | Kyc) => void;
   riskFilter: "all" | Risk; setRiskFilter: (v: "all" | Risk) => void;
   selectedCount: number;
 }) {
   return (
     <div className="mt-4 flex flex-wrap items-center gap-2">
-      <div className="relative flex-1 min-w-[220px]">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search name, email, phone, ID…"
-          className="w-full h-9 pl-9 pr-3 rounded-lg bg-muted/60 border border-transparent focus:outline-none focus:border-pine/40 text-sm"
-        />
-      </div>
+
       <SelectPill icon={ShieldCheck} value={kycFilter} onChange={(v) => setKycFilter(v as any)}
         options={[["all", "All KYC"], ["verified", "Verified"], ["tier2", "Tier 2"], ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"]]} />
       <SelectPill icon={ShieldAlert} value={riskFilter} onChange={(v) => setRiskFilter(v as any)}
