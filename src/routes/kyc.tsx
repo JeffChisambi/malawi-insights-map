@@ -100,8 +100,10 @@ const applications: KycApplication[] = Array.from({ length: 48 }, (_, i) => {
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
+const NOW = new Date(2026, 5, 6).getTime();
+
 function relativeTime(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
+  const diff = NOW - new Date(iso).getTime();
   const h = Math.floor(diff / 3_600_000);
   if (h < 1) return `${Math.floor(diff / 60000)}m ago`;
   if (h < 24) return `${h}h ago`;
