@@ -247,7 +247,7 @@ export function AdminShell({
       <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} collapsed={collapsed} onToggleCollapse={() => setCollapsed((c) => !c)} />
       <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
         <Topbar eyebrow={eyebrow} title={title} />
-        <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-10 space-y-6">{children}</div>
+        <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-10 space-y-6 scrollbar-thin-gray">{children}</div>
       </main>
     </div>
   );
@@ -382,7 +382,7 @@ function NavItem({
               </div>
               {/* Children */}
               {hasChildren ? (
-                <ul className="py-1 max-h-72 overflow-y-auto scrollbar-thin-pine">
+                <ul className="py-1 max-h-72 overflow-y-auto scrollbar-thin-gray">
                   {item.children!.map((c) => {
                     const rowCls = "w-full flex items-center gap-2 px-3.5 py-[7px] text-[12px] text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors text-left";
                     const row = (

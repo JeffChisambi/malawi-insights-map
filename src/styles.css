@@ -150,3 +150,18 @@
     opacity: 0.5;
   }
 }
+
+@utility scrollbar-thin-gray {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.7 0 0) transparent;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: oklch(0.7 0 0);
+    border-radius: 99px;
+  }
+}
