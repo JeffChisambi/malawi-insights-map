@@ -37,8 +37,8 @@ const revenueData = Array.from({ length: 14 }, (_, i) => ({
 }));
 
 const allocation = [
-  { name: "Equities", value: 62, color: "oklch(0.42 0.09 155)" },
-  { name: "Bonds", value: 18, color: "oklch(0.62 0.14 150)" },
+  { name: "Equities", value: 62, color: "#45B369" },
+  { name: "Bonds", value: 18, color: "#7DD99A" },
   { name: "Cash", value: 12, color: "oklch(0.72 0.15 75)" },
   { name: "Funds", value: 8, color: "oklch(0.62 0.13 230)" },
 ];
@@ -183,15 +183,15 @@ function VolumeCard() {
           <AreaChart data={volumeData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="gv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="oklch(0.42 0.09 155)" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="oklch(0.42 0.09 155)" stopOpacity={0} />
+                <stop offset="0%" stopColor="#45B369" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="#45B369" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="oklch(0.92 0.008 150)" vertical={false} />
             <XAxis dataKey="h" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} interval={2} />
             <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} />
             <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.92 0.008 150)", fontSize: 12 }} />
-            <Area type="monotone" dataKey="volume" stroke="oklch(0.42 0.09 155)" strokeWidth={2} fill="url(#gv)" />
+            <Area type="monotone" dataKey="volume" stroke="#45B369" strokeWidth={2} fill="url(#gv)" />
             <Line type="monotone" dataKey="trades" stroke="oklch(0.72 0.15 75)" strokeWidth={2} dot={false} />
           </AreaChart>
         </ResponsiveContainer>
@@ -245,8 +245,8 @@ function RevenueCard() {
             <XAxis dataKey="d" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} />
             <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} />
             <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.92 0.008 150)", fontSize: 12 }} />
-            <Bar dataKey="deposits" fill="oklch(0.42 0.09 155)" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="withdrawals" fill="oklch(0.62 0.14 150)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="deposits" fill="#45B369" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="withdrawals" fill="#7DD99A" radius={[4, 4, 0, 0]} />
             <Line type="monotone" dataKey="revenue" stroke="oklch(0.72 0.15 75)" strokeWidth={2} dot={false} />
           </BarChart>
         </ResponsiveContainer>

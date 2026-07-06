@@ -261,7 +261,7 @@ function Sidebar({
   return (
     <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border">
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
-        <div className="w-9 h-9 rounded-lg bg-pine-soft/20 flex items-center justify-center">
+        <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
           <Trees className="w-5 h-5 text-pine-soft" />
         </div>
         <div>
@@ -295,7 +295,7 @@ function Sidebar({
       </nav>
       <div className="p-3 border-t border-sidebar-border">
         <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sidebar-accent">
-          <div className="w-9 h-9 rounded-full bg-pine-soft/30 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
             <CircleUser className="w-5 h-5 text-white" />
           </div>
           <div className="min-w-0 flex-1">
@@ -317,7 +317,7 @@ function NavItem({
   const Icon = item.icon;
   const hasChildren = !!item.children?.length;
   const cls = `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-    active ? "bg-pine-soft/20 text-white font-medium" : "hover:bg-sidebar-accent"
+    active ? "bg-white/10 text-white font-medium" : "hover:bg-sidebar-accent"
   }`;
   const inner = (
     <>
