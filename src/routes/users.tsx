@@ -312,9 +312,6 @@ function Toolbar({
   return (
     <div className="mt-4 flex flex-wrap items-center gap-2">
 
-      <SelectPill icon={ShieldAlert} value={riskFilter} onChange={(v) => setRiskFilter(v as any)}
-        options={[["all", "All risk"], ["low", "Low"], ["medium", "Medium"], ["high", "High"]]} />
-
       <div className="ml-auto flex items-center gap-2">
         {selectedCount > 0 && <BulkActions count={selectedCount} />}
         <button className="flex items-center gap-2 h-9 px-3 rounded-lg bg-pine text-primary-foreground text-sm hover:opacity-95">
