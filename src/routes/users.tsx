@@ -109,7 +109,7 @@ function UsersPage() {
   const initialTab = tabs.find((t) => t.key === search.tab)?.key ?? "all";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [q] = useState("");
-  const [kycFilter, setKycFilter] = useState<"all" | Kyc>("all");
+  const [kycFilter, setKycFilter] = useState<"all" | Kyc>("verified");
   const [riskFilter, setRiskFilter] = useState<"all" | Risk>("all");
   const [drawerUser, setDrawerUser] = useState<UserRow | null>(null);
   const [checked, setChecked] = useState<Set<string>>(new Set());
@@ -242,7 +242,7 @@ function Tabs({
 }) {
   const activeTab = tabs.find((t) => t.key === active);
   const kycOptions: [string, string][] = [
-    ["all", "All KYC"], ["verified", "Verified"], ["tier2", "Tier 2"],
+    ["verified", "Verified"], ["tier2", "Tier 2"],
     ["tier1", "Tier 1"], ["pending", "Pending"], ["rejected", "Rejected"],
   ];
   const insertIndex = 2;
