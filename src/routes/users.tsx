@@ -186,7 +186,7 @@ function UserStats() {
         return (
           <div key={it.label} className="rounded-xl bg-card border border-border p-4">
             <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground">
+              <div className="w-9 h-9 flex items-center justify-center text-muted-foreground">
                 <Icon className="w-4 h-4" />
               </div>
               <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${it.up ? "text-pine" : "text-amber"}`}>

@@ -168,7 +168,7 @@ function Kpi({
   return (
     <div className="rounded-xl bg-card border border-border p-4 flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground">
+        <div className="w-9 h-9 flex items-center justify-center text-muted-foreground">
           <Icon className="w-4.5 h-4.5" />
         </div>
         <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${trendMap}`}>
@@ -215,7 +215,7 @@ function KpiDouble({
   }
   return (
     <div className="col-span-2 rounded-xl bg-card border border-border p-4 flex gap-4 items-start">
-      <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground shrink-0">
+      <div className="w-9 h-9 flex items-center justify-center text-muted-foreground shrink-0">
         <Icon className="w-4.5 h-4.5" />
       </div>
       <Side stat={left} />
