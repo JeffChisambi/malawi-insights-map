@@ -241,11 +241,11 @@ export function AdminShell({
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({ [activeLabel]: true });
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex h-screen overflow-hidden bg-background text-foreground">
       <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} />
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
         <Topbar eyebrow={eyebrow} title={title} />
-        <div className="px-8 pb-10 space-y-6">{children}</div>
+        <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-10 space-y-6">{children}</div>
       </main>
     </div>
   );
