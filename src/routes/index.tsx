@@ -84,7 +84,6 @@ function Dashboard() {
         <ApprovalsCard />
         <AlertsCard />
       </div>
-      <OperationsStrip />
     </AdminShell>
   );
 }
