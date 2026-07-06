@@ -43,10 +43,10 @@ const revenueData = Array.from({ length: 14 }, (_, i) => ({
 const totalDeposits = revenueData.reduce((s, d) => s + d.deposits, 0);
 const totalWithdrawals = revenueData.reduce((s, d) => s + d.withdrawals, 0);
 
-const _flowMax = Math.max(totalDeposits, totalWithdrawals);
+const _flowTotal = totalDeposits + totalWithdrawals;
 const radialFlowData = [
-  { name: "Withdrawals", raw: totalWithdrawals,  value: Math.round((totalWithdrawals  / _flowMax) * 100), fill: "#F87171" },
-  { name: "Deposits",    raw: totalDeposits,     value: Math.round((totalDeposits     / _flowMax) * 100), fill: "#45B369" },
+  { name: "Withdrawals", raw: totalWithdrawals,  value: Math.round((totalWithdrawals  / _flowTotal) * 100), fill: "#F87171" },
+  { name: "Deposits",    raw: totalDeposits,     value: Math.round((totalDeposits     / _flowTotal) * 100), fill: "#45B369" },
 ];
 
 const allocation = [
