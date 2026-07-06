@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect, useRef } from "react";
 import {
   ShieldCheck, Clock, CheckCircle2, XCircle, FileText,
   Eye, MoreHorizontal, Search, ChevronDown, AlertTriangle, User,
-  Camera, ScanLine, History, ClipboardList, FilePlus,
+  Camera, ScanLine, ClipboardList, FilePlus,
   TrendingUp, TrendingDown, Copy, Phone, MapPin, Calendar,
   Download, Fingerprint, ZoomIn, RotateCw, ExternalLink,
 } from "lucide-react";
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/kyc")({
 /* ─────────────────────────── mock data ─────────────────────────── */
 
 type KycStatus = "pending" | "approved" | "rejected" | "additional_docs" | "manual";
-type DocType = "national_id" | "passport" | "drivers_license";
+type DocType = "national_id";
 type TierRequested = "tier1" | "tier2";
 
 type KycApplication = {
@@ -60,7 +60,7 @@ function seed(i: number, mod: number) {
   return Math.abs(Math.sin(i * 9301 + 49297)) % 1 * mod;
 }
 
-const docTypes: DocType[] = ["national_id", "passport", "drivers_license"];
+const docTypes: DocType[] = ["national_id"];
 const statuses: KycStatus[] = ["pending", "pending", "pending", "pending", "approved", "approved", "rejected", "additional_docs", "manual"];
 
 const applications: KycApplication[] = Array.from({ length: 48 }, (_, i) => {
@@ -116,8 +116,6 @@ function fmtDate(iso: string) {
 
 const docTypeLabel: Record<DocType, string> = {
   national_id: "National ID",
-  passport: "Passport",
-  drivers_license: "Driver's Licence",
 };
 
 /* ─────────────────────────── tabs ─────────────────────────── */
@@ -126,8 +124,6 @@ type Tab = { key: string; label: string; icon: React.ComponentType<{ className?:
 
 const tabs: Tab[] = [
   { key: "all", label: "All", icon: ClipboardList, filter: () => true },
-  { key: "documents", label: "Documents", icon: FileText, filter: (a) => a.status !== "approved" },
-  { key: "history", label: "History", icon: History, filter: () => true },
 ];
 
 const filterTabs: Tab[] = [
@@ -193,12 +189,7 @@ function KycPage() {
         <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
-      {/* History tab: text view */}
-      {activeTab === "history" && <VerificationHistory />}
-
-      {/* Main table tabs */}
-      {activeTab !== "history" && (
-        <Card className="!p-0 overflow-hidden">
+      <Card className="!p-0 overflow-hidden">
           {/* Toolbar */}
           <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
             <div className="relative flex-1 max-w-xs">
@@ -228,7 +219,6 @@ function KycPage() {
             </div>
           </div>
         </Card>
-      )}
 
       {selected && <ReviewModal app={selected} onClose={() => setSelected(null)} onApprove={() => setSelected(null)} onReject={() => setSelected(null)} />}
     </AdminShell>
@@ -831,37 +821,3 @@ function MetaRow({ icon: Icon, label, value }: { icon: React.ComponentType<{ cla
   );
 }
 
-/* ─────────────────────────── history ─────────────────────────── */
-
-function VerificationHistory() {
-  const history = applications.filter((a) => a.status !== "pending").slice(0, 20);
-  return (
-    <Card title="Verification History" subtitle="Completed KYC reviews">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border">
-            <th className="pb-2 text-left font-medium">Applicant</th>
-            <th className="pb-2 text-left font-medium">Outcome</th>
-            <th className="pb-2 text-left font-medium">Tier</th>
-            <th className="pb-2 text-left font-medium">Reviewer</th>
-            <th className="pb-2 text-left font-medium">Reviewed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {history.map((a) => (
-            <tr key={a.id} className="border-b border-border last:border-0">
-              <td className="py-2.5">
-                <div className="font-medium text-[13px]">{a.name}</div>
-                <div className="text-[11px] text-muted-foreground font-mono">{a.id}</div>
-              </td>
-              <td className="py-2.5"><KycStatusBadge status={a.status} /></td>
-              <td className="py-2.5"><TierBadge tier={a.tierRequested} /></td>
-              <td className="py-2.5 text-[12px] text-muted-foreground">{a.reviewer ?? "—"}</td>
-              <td className="py-2.5 text-[12px] text-muted-foreground">{a.reviewedAt ? relativeTime(a.reviewedAt) : "—"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Card>
-  );
-}
