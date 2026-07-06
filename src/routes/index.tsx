@@ -124,8 +124,6 @@ function KpiGrid() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
       <Kpi icon={Users} label="Registered users" value="184,203" delta="+2.4%" trend="up" sub="12,842 active today" />
-      <Kpi icon={UserCheck} label="Verified users" value="128,591" delta="69.8%" trend="up" sub="27 KYC pending" />
-      <Kpi icon={Briefcase} label="Trading accounts" value="96,412" delta="+1.1%" trend="up" sub="AUM MWK 812.4B" />
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
       <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
       <Kpi icon={DollarSign} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
