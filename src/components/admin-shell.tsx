@@ -263,23 +263,23 @@ function Sidebar({
 }) {
   return (
     <aside
-      className="shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border transition-all duration-300 ease-in-out overflow-hidden"
+      className="shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border transition-all duration-300 ease-in-out overflow-hidden shadow-sm"
       style={{ width: collapsed ? "4.5rem" : "17rem" }}
     >
       {/* Header */}
-      <div className="flex items-center h-16 px-4 shrink-0 border-b border-white/8">
+      <div className="flex items-center h-16 px-4 shrink-0 border-b border-sidebar-border">
         <div className="w-8 h-8 shrink-0 flex items-center justify-center">
           <img src="/logo.png" alt="Pine" className="w-8 h-8 object-contain" />
         </div>
         {!collapsed && (
           <div className="ml-3 flex-1 min-w-0">
-            <div className="text-[15px] font-bold text-white leading-none">Pine</div>
-            <div className="text-[9px] tracking-[0.18em] text-white/40 mt-0.5">BROKER ADMIN</div>
+            <div className="text-[15px] font-bold text-gray-900 leading-none">Pine</div>
+            <div className="text-[9px] tracking-[0.18em] text-gray-400 mt-0.5">BROKER ADMIN</div>
           </div>
         )}
         <button
           onClick={onToggleCollapse}
-          className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/8 transition-colors ml-1"
+          className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-gray-300 hover:text-gray-600 hover:bg-gray-100 transition-colors ml-1"
           title={collapsed ? "Expand" : "Collapse"}
         >
           {collapsed
@@ -289,16 +289,16 @@ function Sidebar({
       </div>
 
       {/* Search */}
-      <div className={`shrink-0 border-b border-white/8 ${collapsed ? "flex justify-center py-3" : "px-3 py-3"}`}>
+      <div className={`shrink-0 border-b border-sidebar-border ${collapsed ? "flex justify-center py-3" : "px-3 py-3"}`}>
         {collapsed ? (
-          <button className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/8 text-white/35 hover:text-white/60 transition-colors">
+          <button className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors">
             <Search className="w-4 h-4" />
           </button>
         ) : (
-          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/6 border border-white/8 hover:border-white/15 transition-colors cursor-pointer">
-            <Search className="w-3.5 h-3.5 text-white/35 shrink-0" />
-            <span className="flex-1 text-[13px] text-white/30 select-none">Search</span>
-            <span className="text-[10px] border border-white/15 rounded px-1.5 py-0.5 text-white/25 leading-none">⌘K</span>
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+            <Search className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+            <span className="flex-1 text-[13px] text-gray-400 select-none">Search</span>
+            <span className="text-[10px] border border-gray-200 rounded px-1.5 py-0.5 text-gray-400 leading-none">⌘K</span>
           </div>
         )}
       </div>
@@ -312,8 +312,8 @@ function Sidebar({
             <div key={section} className="mb-1">
               <div className={`flex items-center px-4 py-1.5 ${collapsed ? "justify-center" : ""}`}>
                 {collapsed
-                  ? <div className="w-6 border-t border-white/10" />
-                  : <span className="text-[9px] font-semibold tracking-[0.14em] text-white/30">{section}</span>}
+                  ? <div className="w-6 border-t border-gray-200" />
+                  : <span className="text-[9px] font-semibold tracking-[0.14em] text-gray-400">{section}</span>}
               </div>
               <ul className="px-2 space-y-px">
                 {items.map((item) => (
@@ -333,18 +333,18 @@ function Sidebar({
       </nav>
 
       {/* User footer */}
-      <div className="shrink-0 border-t border-white/8 p-3">
-        <div className={`flex items-center rounded-xl px-2 py-2 hover:bg-white/6 cursor-pointer transition-colors ${collapsed ? "justify-center" : "gap-2.5"}`}>
-          <div className="w-8 h-8 shrink-0 rounded-full bg-white/12 flex items-center justify-center ring-1 ring-white/10">
-            <CircleUser className="w-4 h-4 text-white/70" />
+      <div className="shrink-0 border-t border-sidebar-border p-3">
+        <div className={`flex items-center rounded-xl px-2 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${collapsed ? "justify-center" : "gap-2.5"}`}>
+          <div className="w-8 h-8 shrink-0 rounded-full bg-gray-100 flex items-center justify-center ring-1 ring-gray-200">
+            <CircleUser className="w-4 h-4 text-gray-500" />
           </div>
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <div className="text-[13px] font-medium text-white leading-none truncate">Muhammad Irfan</div>
-                <div className="text-[9px] tracking-[0.1em] text-white/35 mt-0.5 truncate">SUPER ADMIN</div>
+                <div className="text-[13px] font-medium text-gray-800 leading-none truncate">Muhammad Irfan</div>
+                <div className="text-[9px] tracking-[0.1em] text-gray-400 mt-0.5 truncate">SUPER ADMIN</div>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-white/25 shrink-0" />
+              <ChevronDown className="w-3.5 h-3.5 text-gray-300 shrink-0" />
             </>
           )}
         </div>
@@ -364,22 +364,22 @@ function NavItem({
   /* ── Collapsed: icon only ── */
   if (collapsed) {
     const cls = `relative w-full flex items-center justify-center p-2.5 rounded-lg transition-colors ${
-      active ? "bg-white/12" : "hover:bg-white/7"
+      active ? "bg-pine/10" : "hover:bg-gray-100"
     }`;
     return (
       <li>
         <div className="relative" title={item.label}>
           {item.href ? (
             <Link to={item.href} className={cls}>
-              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine-soft" : "text-white/50"}`} />
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
             </Link>
           ) : (
             <button className={cls}>
-              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine-soft" : "text-white/50"}`} />
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
             </button>
           )}
           {item.badge != null && (
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-pine-soft" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-pine" />
           )}
         </div>
       </li>
@@ -389,8 +389,8 @@ function NavItem({
   /* ── Expanded: icon + label ── */
   const rowCls = `w-full flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[13px] font-[450] transition-colors ${
     active
-      ? "bg-white/10 text-white"
-      : "text-white/55 hover:bg-white/6 hover:text-white/85"
+      ? "bg-pine/8 text-gray-900"
+      : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"
   }`;
 
   const rowContent = (icon: React.ReactNode, label: string, badge?: string | number, chevron?: React.ReactNode) => (
@@ -399,7 +399,7 @@ function NavItem({
       <span className="flex-1 text-left truncate">{label}</span>
       {badge != null && (
         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${
-          active ? "bg-pine-soft/25 text-pine-soft" : "bg-white/10 text-white/50"
+          active ? "bg-pine/15 text-pine" : "bg-gray-100 text-gray-500"
         }`}>
           {badge}
         </span>
@@ -413,18 +413,18 @@ function NavItem({
       {hasChildren ? (
         <button onClick={onToggle} className={rowCls}>
           {rowContent(
-            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "text-white/40"}`} />,
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-gray-400"}`} />,
             item.label,
             item.badge,
             isOpen
-              ? <ChevronDown className="w-3 h-3 text-white/30 shrink-0" />
-              : <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />,
+              ? <ChevronDown className="w-3 h-3 text-gray-300 shrink-0" />
+              : <ChevronRight className="w-3 h-3 text-gray-300 shrink-0" />,
           )}
         </button>
       ) : item.href ? (
         <Link to={item.href} className={rowCls}>
           {rowContent(
-            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "text-white/40"}`} />,
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine" : "text-gray-400"}`} />,
             item.label,
             item.badge,
           )}
@@ -432,7 +432,7 @@ function NavItem({
       ) : (
         <button className={rowCls}>
           {rowContent(
-            <Icon className="w-4 h-4 shrink-0 text-white/40" />,
+            <Icon className="w-4 h-4 shrink-0 text-gray-400" />,
             item.label,
             item.badge,
           )}
@@ -442,15 +442,15 @@ function NavItem({
       {/* Children with vertical connector */}
       {hasChildren && isOpen && (
         <ul className="mt-0.5 ml-[22px] relative">
-          <div className="absolute left-0 top-1 bottom-2 w-px bg-white/10" />
+          <div className="absolute left-0 top-1 bottom-2 w-px bg-gray-200" />
           {item.children!.map((c) => {
-            const childCls = "relative w-full flex items-center gap-2 pl-5 pr-2 py-[6px] text-[12px] transition-colors text-white/40 hover:text-white/75 hover:bg-white/5 rounded-r-lg text-left";
+            const childCls = "relative w-full flex items-center gap-2 pl-5 pr-2 py-[6px] text-[12px] transition-colors text-gray-400 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg text-left";
             const childContent = (
               <>
-                <div className="absolute left-0 top-1/2 w-3.5 h-px bg-white/10" />
+                <div className="absolute left-0 top-1/2 w-3.5 h-px bg-gray-200" />
                 <span className="flex-1 truncate">{c.label}</span>
                 {c.badge != null && (
-                  <span className="text-[10px] text-white/35 bg-white/8 px-1.5 py-0.5 rounded-full leading-none shrink-0">
+                  <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full leading-none shrink-0">
                     {c.badge}
                   </span>
                 )}
