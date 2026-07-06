@@ -75,7 +75,6 @@ function Dashboard() {
       <KpiGrid />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <VolumeCard />
-        <SystemHealthCard />
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <RevenueCard />
