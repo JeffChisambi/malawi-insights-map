@@ -241,10 +241,22 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({ [activeLabel]: true });
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("pine-sidebar-collapsed") === "1";
+  });
+  const toggleCollapse = () => {
+    setCollapsed((c) => {
+      const next = !c;
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("pine-sidebar-collapsed", next ? "1" : "0");
+      }
+      return next;
+    });
+  };
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
-      <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} collapsed={collapsed} onToggleCollapse={() => setCollapsed((c) => !c)} />
+      <Sidebar open={open} setOpen={setOpen} activeLabel={activeLabel} collapsed={collapsed} onToggleCollapse={toggleCollapse} />
       <main className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
         <Topbar eyebrow={eyebrow} title={title} />
         <div className="flex-1 min-h-0 overflow-y-auto px-8 pb-10 space-y-6 scrollbar-thin-gray">{children}</div>
