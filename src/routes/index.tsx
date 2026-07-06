@@ -82,8 +82,6 @@ function Dashboard() {
       <KpiGrid />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <VolumeCard />
-      </div>
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <RevenueCard />
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
@@ -237,7 +235,7 @@ function RevenueCard() {
   const depositPct = Math.round((totalDeposits / total) * 100);
   const withdrawalPct = 100 - depositPct;
   return (
-    <Card title="Deposits vs Withdrawals" subtitle="Last 14 days · MWK millions" className="xl:col-span-2">
+    <Card title="Deposits vs Withdrawals" subtitle="Last 14 days · MWK millions">
       <div className="flex items-center gap-8 h-72">
         <div className="flex-1 h-full">
           <ResponsiveContainer width="100%" height="100%">
