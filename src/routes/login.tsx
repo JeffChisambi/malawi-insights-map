@@ -51,7 +51,7 @@ function LoginPage() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center">
-              <img src="/logo.png" alt="Pine" className="w-6 h-6 object-contain" />
+              <img src="/logo.png" alt="Pine" className="w-6 h-6 object-contain brightness-0 invert" />
             </div>
             <div>
               <div className="text-white font-bold text-lg leading-none">Pine</div>
