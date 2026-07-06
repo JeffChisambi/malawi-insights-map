@@ -263,11 +263,22 @@ function Sidebar({
 }) {
   return (
     <aside
-      className="shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border transition-all duration-300 ease-in-out overflow-hidden shadow-sm"
+      className="relative shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border rounded-tr-[28px] transition-all duration-300 ease-in-out overflow-visible"
       style={{ width: collapsed ? "4.5rem" : "17rem" }}
     >
+      {/* Floating collapse toggle — overlaps the top-right corner */}
+      <button
+        onClick={onToggleCollapse}
+        className="absolute top-[4.5rem] -right-4 z-20 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
+        title={collapsed ? "Expand" : "Collapse"}
+      >
+        {collapsed
+          ? <ChevronRight className="w-3.5 h-3.5" />
+          : <ChevronLeft className="w-3.5 h-3.5" />}
+      </button>
+
       {/* Header */}
-      <div className="flex items-center h-16 px-4 shrink-0 border-b border-sidebar-border">
+      <div className="relative z-10 flex items-center h-16 px-4 shrink-0 border-b border-sidebar-border">
         <div className="w-8 h-8 shrink-0 flex items-center justify-center">
           <img src="/logo.png" alt="Pine" className="w-8 h-8 object-contain" />
         </div>
@@ -277,15 +288,6 @@ function Sidebar({
             <div className="text-[9px] tracking-[0.18em] text-gray-400 mt-0.5">BROKER ADMIN</div>
           </div>
         )}
-        <button
-          onClick={onToggleCollapse}
-          className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-gray-300 hover:text-gray-600 hover:bg-gray-100 transition-colors ml-1"
-          title={collapsed ? "Expand" : "Collapse"}
-        >
-          {collapsed
-            ? <ChevronRight className="w-3.5 h-3.5" />
-            : <ChevronLeft className="w-3.5 h-3.5" />}
-        </button>
       </div>
 
       {/* Search */}
