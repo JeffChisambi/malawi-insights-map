@@ -409,9 +409,7 @@ function NavItem({
                     );
                     return (
                       <li key={c.label}>
-                        {c.href
-                          ? <Link to={c.href} className={rowCls}>{row}</Link>
-                          : <button className={rowCls}>{row}</button>}
+                        <Link to={c.href ?? "/coming-soon"} className={rowCls}>{row}</Link>
                       </li>
                     );
                   })}
@@ -531,9 +529,7 @@ function NavItem({
                 {!isLast && (
                   <div className="pointer-events-none absolute left-[5px] top-1/2 bottom-0 w-[1.5px] bg-border" />
                 )}
-                {c.href
-                  ? <Link to={c.href} className={childCls}>{childContent}</Link>
-                  : <button className={childCls}>{childContent}</button>}
+                <Link to={c.href ?? "/coming-soon"} className={childCls}>{childContent}</Link>
               </li>
             );
           })}

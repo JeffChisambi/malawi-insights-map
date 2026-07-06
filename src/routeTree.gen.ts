@@ -13,6 +13,7 @@ import { Route as UsersRouteImport } from './routes/users'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KycRouteImport } from './routes/kyc'
+import { Route as ComingSoonRouteImport } from './routes/coming-soon'
 import { Route as IndexRouteImport } from './routes/index'
 
 const UsersRoute = UsersRouteImport.update({
@@ -35,6 +36,11 @@ const KycRoute = KycRouteImport.update({
   path: '/kyc',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComingSoonRoute = ComingSoonRouteImport.update({
+  id: '/coming-soon',
+  path: '/coming-soon',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/kyc': typeof KycRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -65,14 +74,28 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/kyc' | '/login' | '/notifications' | '/users'
+  fullPaths:
+    | '/'
+    | '/coming-soon'
+    | '/kyc'
+    | '/login'
+    | '/notifications'
+    | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/kyc' | '/login' | '/notifications' | '/users'
-  id: '__root__' | '/' | '/kyc' | '/login' | '/notifications' | '/users'
+  to: '/' | '/coming-soon' | '/kyc' | '/login' | '/notifications' | '/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/coming-soon'
+    | '/kyc'
+    | '/login'
+    | '/notifications'
+    | '/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComingSoonRoute: typeof ComingSoonRoute
   KycRoute: typeof KycRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -109,6 +132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KycRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coming-soon': {
+      id: '/coming-soon'
+      path: '/coming-soon'
+      fullPath: '/coming-soon'
+      preLoaderRoute: typeof ComingSoonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,6 +151,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComingSoonRoute: ComingSoonRoute,
   KycRoute: KycRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
