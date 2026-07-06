@@ -189,7 +189,7 @@ function UserStats() {
               <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-muted/70 text-muted-foreground">
                 <Icon className="w-4 h-4" />
               </div>
-              <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${it.up ? "text-pine bg-pine/10" : "text-amber bg-amber/10"}`}>
+              <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${it.up ? "text-pine" : "text-amber"}`}>
                 <Trend className="w-3 h-3" /> {it.trend}
               </span>
             </div>
