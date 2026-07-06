@@ -134,3 +134,19 @@
     display: none;
   }
 }
+
+@utility scrollbar-thin-pine {
+  scrollbar-width: thin;
+  scrollbar-color: #45B369 transparent;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #45B369;
+    border-radius: 99px;
+    opacity: 0.5;
+  }
+}
