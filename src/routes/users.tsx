@@ -6,7 +6,7 @@ import {
   ShieldCheck, CircleUser, Mail, Phone, MapPin, Calendar, Fingerprint,
   Smartphone, Wallet, Landmark, Activity, Ban, Snowflake, CheckCircle2,
   XCircle, Clock, ArrowUpRight, ArrowDownRight, KeyRound, LogOut, RefreshCw,
-  FileText, ChevronRight, Building2, CreditCard, Users, UserCheck, UserX,
+  FileText, ChevronRight, ChevronDown, Building2, CreditCard, Users, UserCheck, UserX,
   Eye, Copy, ExternalLink, TrendingUp, TrendingDown,
 } from "lucide-react";
 import { AdminShell, Card } from "@/components/admin-shell";
@@ -213,27 +213,53 @@ function Tabs({
   onChange: (k: string) => void;
   counts: number[];
 }) {
+  const activeTab = tabs.find((t) => t.key === active);
   return (
-    <div className="flex items-center gap-1 border-b border-border -mt-2 -mx-5 px-5 pb-0 overflow-x-auto">
-      {tabs.map((t, i) => {
-        const isActive = t.key === active;
-        return (
-          <button
-            key={t.key}
-            onClick={() => onChange(t.key)}
-            className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
-              isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
-            }`}
+    <>
+      {/* ── Dropdown on small screens ── */}
+      <div className="sm:hidden -mt-2 -mx-5 px-5 pb-3 border-b border-border">
+        <label className="relative flex items-center gap-2 h-9 pl-3 pr-8 rounded-lg border border-border text-sm bg-background cursor-pointer w-full">
+          <span className="font-medium text-foreground truncate flex-1">
+            {activeTab?.label}
+          </span>
+          <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded bg-pine/10 text-pine leading-none shrink-0">
+            {counts[tabs.indexOf(activeTab!)]}
+          </span>
+          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 absolute right-2" />
+          <select
+            className="absolute inset-0 opacity-0 cursor-pointer w-full"
+            value={active}
+            onChange={(e) => onChange(e.target.value)}
           >
-            {t.label}
-            <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
-              {counts[i]}
-            </span>
-            {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
-          </button>
-        );
-      })}
-    </div>
+            {tabs.map((t, i) => (
+              <option key={t.key} value={t.key}>{t.label} ({counts[i]})</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {/* ── Tab strip on sm+ screens ── */}
+      <div className="hidden sm:flex items-center gap-1 border-b border-border -mt-2 -mx-5 px-5 pb-0">
+        {tabs.map((t, i) => {
+          const isActive = t.key === active;
+          return (
+            <button
+              key={t.key}
+              onClick={() => onChange(t.key)}
+              className={`relative whitespace-nowrap px-3 py-3 text-sm font-medium transition-colors ${
+                isActive ? "text-pine" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t.label}
+              <span className={`ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded ${isActive ? "bg-pine/10 text-pine" : "bg-muted text-muted-foreground"}`}>
+                {counts[i]}
+              </span>
+              {isActive && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-pine rounded-full" />}
+            </button>
+          );
+        })}
+      </div>
+    </>
   );
 }
 
