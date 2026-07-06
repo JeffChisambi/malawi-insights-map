@@ -78,7 +78,6 @@ function Dashboard() {
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <RevenueCard />
-        <AllocationCard />
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <ApprovalsCard />
