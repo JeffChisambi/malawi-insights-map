@@ -1,5 +1,5 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
-import { Fragment, useMemo, useState, useEffect } from "react";
+import { Fragment, useMemo, useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import {
   Search, Filter, Download, UserPlus, MoreHorizontal, Shield, ShieldAlert,
@@ -324,18 +324,49 @@ function SelectPill({
   onChange: (v: string) => void;
   options: [string, string][];
 }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const label = options.find(([v]) => v === value)?.[1];
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
   return (
-    <label className="relative flex items-center gap-2 h-9 pl-3 pr-8 rounded-lg border border-border text-sm hover:bg-muted/40 cursor-pointer">
-      <Icon className="w-4 h-4 text-muted-foreground" />
-      <span className="text-foreground">{options.find(([v]) => v === value)?.[1]}</span>
-      <select
-        className="absolute inset-0 opacity-0 cursor-pointer"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={`flex items-center gap-2 h-9 pl-3 pr-2.5 rounded-lg border text-sm transition-colors cursor-pointer ${
+          open ? "border-pine/40 bg-pine/5 text-pine" : "border-border hover:bg-muted/40 text-foreground"
+        }`}
       >
-        {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-      </select>
-    </label>
+        <Icon className={`w-4 h-4 ${open ? "text-pine" : "text-muted-foreground"}`} />
+        <span>{label}</span>
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180 text-pine" : "text-muted-foreground"}`} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 z-50 min-w-[9rem] rounded-xl border border-border bg-card shadow-lg overflow-hidden py-1">
+          {options.map(([v, l]) => (
+            <button
+              key={v}
+              onClick={() => { onChange(v); setOpen(false); }}
+              className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                v === value
+                  ? "bg-pine/10 text-pine font-medium"
+                  : "text-foreground hover:bg-muted/50"
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
