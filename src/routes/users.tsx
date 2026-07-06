@@ -457,12 +457,9 @@ function UsersTable({
 
 function Avatar({ name }: { name: string }) {
   const initials = name.split(" ").slice(0, 2).map((s) => s[0]).join("");
-  const hues = [155, 190, 75, 230, 340, 20];
-  const hue = hues[name.charCodeAt(0) % hues.length];
   return (
     <div
-      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-      style={{ background: `oklch(0.58 0.12 ${hue})` }}
+      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0 bg-gray-400"
     >
       {initials}
     </div>
