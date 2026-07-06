@@ -236,16 +236,16 @@ function RevenueCard() {
   const withdrawalPct = 100 - depositPct;
   return (
     <Card title="Deposits vs Withdrawals" subtitle="Last 14 days · MWK millions">
-      <div className="flex items-center gap-8 h-72">
-        <div className="flex-1 h-full">
+      <div className="flex flex-col gap-4">
+        <div className="h-44 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={flowData}
                 cx="50%"
                 cy="50%"
-                innerRadius={72}
-                outerRadius={108}
+                innerRadius={52}
+                outerRadius={78}
                 paddingAngle={3}
                 dataKey="value"
                 startAngle={90}
@@ -262,26 +262,26 @@ function RevenueCard() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex flex-col gap-5 pr-4">
+        <div className="flex flex-col gap-2">
           {flowData.map((entry) => (
-            <div key={entry.name} className="flex flex-col gap-1">
+            <div key={entry.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full shrink-0" style={{ background: entry.color }} />
-                <span className="text-sm text-muted-foreground">{entry.name}</span>
+                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: entry.color }} />
+                <span className="text-xs text-muted-foreground">{entry.name}</span>
               </div>
-              <div className="text-xl font-semibold pl-5">
-                MWK {(entry.value / 1000).toFixed(1)}B
-              </div>
-              <div className="text-xs text-muted-foreground pl-5">
-                {entry.name === "Deposits" ? depositPct : withdrawalPct}% of flow
+              <div className="text-right">
+                <span className="text-sm font-semibold">MWK {(entry.value / 1000).toFixed(1)}B</span>
+                <span className="text-xs text-muted-foreground ml-1.5">
+                  {entry.name === "Deposits" ? depositPct : withdrawalPct}%
+                </span>
               </div>
             </div>
           ))}
-          <div className="pt-2 border-t border-border pl-5">
-            <div className="text-xs text-muted-foreground">Net flow</div>
-            <div className={`text-base font-semibold ${totalDeposits > totalWithdrawals ? "text-green-600" : "text-red-500"}`}>
+          <div className="flex items-center justify-between pt-2 border-t border-border">
+            <span className="text-xs text-muted-foreground">Net flow</span>
+            <span className={`text-sm font-semibold ${totalDeposits > totalWithdrawals ? "text-green-600" : "text-red-500"}`}>
               +MWK {((totalDeposits - totalWithdrawals) / 1000).toFixed(1)}B
-            </div>
+            </span>
           </div>
         </div>
       </div>
