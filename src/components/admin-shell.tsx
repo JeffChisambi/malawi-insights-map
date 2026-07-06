@@ -221,6 +221,9 @@ export const nav: NavGroup[] = [
 
 export const sectionOrder = ["OVERVIEW", "CLIENTS", "MARKETS", "FINANCE", "ENGAGEMENT", "INSIGHTS", "RISK", "ACCESS", "SYSTEM"];
 
+// Unread notification count — scheduled + failed items that need attention
+export const NOTIF_UNREAD_COUNT = 12;
+
 export function AdminShell({
   activeLabel,
   eyebrow,
@@ -601,10 +604,16 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
             ? <Sun className="w-4 h-4 text-muted-foreground" />
             : <Moon className="w-4 h-4 text-muted-foreground" />}
         </button>
-        <button className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center relative">
+        <Link
+          to="/notifications"
+          className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center relative hover:bg-muted transition-colors"
+          aria-label="Notifications"
+        >
           <Bell className="w-4 h-4 text-muted-foreground" />
-          <span className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-destructive" />
-        </button>
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-white text-[10px] font-bold flex items-center justify-center leading-none">
+            {NOTIF_UNREAD_COUNT}
+          </span>
+        </Link>
       </div>
     </header>
   );
