@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect, useRef } from "react";
 import {
   ShieldCheck, Clock, CheckCircle2, XCircle, FileText,
   Eye, MoreHorizontal, Search, ChevronDown, AlertTriangle, User,
-  Camera, ScanLine, History, ClipboardList, FilePlus, BookOpen,
+  Camera, ScanLine, History, ClipboardList, FilePlus,
   TrendingUp, TrendingDown, Copy, Phone, MapPin, Calendar,
   Download, Fingerprint, ZoomIn, RotateCw, ExternalLink,
 } from "lucide-react";
@@ -127,18 +127,17 @@ type Tab = { key: string; label: string; icon: React.ComponentType<{ className?:
 const tabs: Tab[] = [
   { key: "all", label: "All", icon: ClipboardList, filter: () => true },
   { key: "documents", label: "Documents", icon: FileText, filter: (a) => a.status !== "approved" },
-  { key: "face", label: "Face Verification", icon: Camera, filter: (a) => a.faceMatchScore < 80 || a.status === "pending" },
-  { key: "ocr", label: "OCR Results", icon: ScanLine, filter: (a) => a.ocrConfidence < 85 },
   { key: "history", label: "History", icon: History, filter: () => true },
 ];
 
 const filterTabs: Tab[] = [
-  { key: "audit", label: "Audit Trail", icon: BookOpen, filter: () => true },
   { key: "manual", label: "Manual Review", icon: Eye, filter: (a) => a.status === "manual" },
   { key: "approved", label: "Approved", icon: CheckCircle2, filter: (a) => a.status === "approved" },
   { key: "rejected", label: "Rejected", icon: XCircle, filter: (a) => a.status === "rejected" },
   { key: "additional", label: "Additional Docs", icon: FilePlus, filter: (a) => a.status === "additional_docs" },
   { key: "pending", label: "Pending Review", icon: Clock, filter: (a) => a.status === "pending" },
+  { key: "face", label: "Face Verification", icon: Camera, filter: (a) => a.faceMatchScore < 80 || a.status === "pending" },
+  { key: "ocr", label: "OCR Results", icon: ScanLine, filter: (a) => a.ocrConfidence < 85 },
 ];
 
 const allTabs: Tab[] = [...tabs, ...filterTabs];
@@ -194,12 +193,11 @@ function KycPage() {
         <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
-      {/* Audit / History tabs: text view */}
-      {activeTab === "audit" && <AuditTrail />}
+      {/* History tab: text view */}
       {activeTab === "history" && <VerificationHistory />}
 
       {/* Main table tabs */}
-      {activeTab !== "audit" && activeTab !== "history" && (
+      {activeTab !== "history" && (
         <Card className="!p-0 overflow-hidden">
           {/* Toolbar */}
           <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
@@ -830,50 +828,6 @@ function MetaRow({ icon: Icon, label, value }: { icon: React.ComponentType<{ cla
       <span className="text-muted-foreground text-xs w-20 shrink-0">{label}</span>
       <span className="font-medium text-xs truncate">{value}</span>
     </div>
-  );
-}
-
-/* ─────────────────────────── audit trail ─────────────────────────── */
-
-function AuditTrail() {
-  const events = [
-    { time: "2m ago", actor: "Chisomo M.", action: "Approved KYC", target: "Limbani Kaunda (KYC-10895)", type: "approve" },
-    { time: "8m ago", actor: "Prince C.", action: "Requested additional documents", target: "Grace Phiri (KYC-10537)", type: "request" },
-    { time: "15m ago", actor: "System", action: "Auto-flagged: low liveness score", target: "James Nyirenda (KYC-10716)", type: "flag" },
-    { time: "34m ago", actor: "Grace P.", action: "Rejected KYC", target: "Mercy Kaunda (KYC-10358)", type: "reject" },
-    { time: "1h ago", actor: "James N.", action: "Started manual review", target: "Blessings Chirwa (KYC-10179)", type: "manual" },
-    { time: "1h ago", actor: "Chisomo M.", action: "Approved KYC", target: "Kondwani Mvula (KYC-10000)", type: "approve" },
-    { time: "2h ago", actor: "System", action: "OCR completed: 94% confidence", target: "Alinafe Banda (KYC-10537)", type: "ocr" },
-    { time: "3h ago", actor: "Prince C.", action: "Approved KYC", target: "Thoko Msonda (KYC-10358)", type: "approve" },
-  ];
-  const toneMap: Record<string, string> = {
-    approve: "bg-pine/10 text-pine",
-    reject: "bg-rose/10 text-rose",
-    flag: "bg-amber/10 text-amber",
-    request: "bg-muted text-muted-foreground",
-    manual: "bg-muted text-muted-foreground",
-    ocr: "bg-pine/10 text-pine",
-  };
-  return (
-    <Card title="Audit Trail" subtitle="All KYC admin actions logged in sequence">
-      <ol className="space-y-3">
-        {events.map((e, i) => (
-          <li key={i} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
-            <span className={`mt-0.5 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${toneMap[e.type]}`}>
-              {e.type.toUpperCase()}
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm">
-                <span className="font-medium">{e.actor}</span>
-                <span className="text-muted-foreground"> · {e.action}</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-0.5 truncate">{e.target}</div>
-            </div>
-            <span className="text-[11px] text-muted-foreground shrink-0">{e.time}</span>
-          </li>
-        ))}
-      </ol>
-    </Card>
   );
 }
 
