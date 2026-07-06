@@ -24,11 +24,9 @@ export const nav: NavGroup[] = [
   {
     section: "CLIENTS", icon: Users, label: "User Management", href: "/users", badge: 12,
     children: [
-      { label: "All Users", href: "/users" }, { label: "Advanced Filters", href: "/users?tab=filters" },
-      { label: "Frozen Accounts", href: "/users?tab=frozen", badge: 4 },
-      { label: "Suspended", href: "/users?tab=suspended", badge: 2 },
-      { label: "Closed", href: "/users?tab=closed" }, { label: "Login History", href: "/users?tab=logins" },
-      { label: "Trusted Devices", href: "/users?tab=devices" }, { label: "Linked Banks", href: "/users?tab=banks" },
+      { label: "All Users", href: "/users" },
+      { label: "Login History", href: "/users?tab=logins" },
+      { label: "Linked Banks", href: "/users?tab=banks" },
       { label: "Linked Mobile Money", href: "/users?tab=momo" }, { label: "Activity Timeline", href: "/users?tab=activity" },
       { label: "Export" },
     ],
