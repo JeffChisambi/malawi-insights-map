@@ -1,4 +1,4 @@
-import { useState, useRef, type ReactNode } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import {
@@ -241,10 +241,10 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({ [activeLabel]: true });
-  const [collapsed, setCollapsed] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("pine-sidebar-collapsed") === "1";
-  });
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    setCollapsed(window.localStorage.getItem("pine-sidebar-collapsed") === "1");
+  }, []);
   const toggleCollapse = () => {
     setCollapsed((c) => {
       const next = !c;
