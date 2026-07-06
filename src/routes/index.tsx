@@ -94,7 +94,6 @@ function PageHeader() {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 pt-6">
       <div>
-        <h1 className="text-2xl font-semibold">Platform overview</h1>
         <p className="text-sm text-muted-foreground">Realtime health, liquidity and risk across the brokerage.</p>
       </div>
       <div className="flex items-center gap-2 text-xs">
