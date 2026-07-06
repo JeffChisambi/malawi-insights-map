@@ -5,8 +5,7 @@ import {
   Wallet, BookOpen, CreditCard, Building2, LineChart as LineChartIcon, Newspaper,
   Bell, Star, BarChart3, Headphones, AlertTriangle, Scale, KeyRound, UserCog,
   Activity, ListChecks, History, Settings, Plug, DatabaseBackup,
-  ChevronDown, ChevronRight, Search, Download, Trees, CircleUser, Clock,
-  PanelLeftClose, PanelLeftOpen,
+  ChevronDown, ChevronRight, ChevronLeft, Search, Download, CircleUser, Clock,
 } from "lucide-react";
 
 export type NavChild = { label: string; href?: string; badge?: string | number };
@@ -265,42 +264,58 @@ function Sidebar({
   return (
     <aside
       className="shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border transition-all duration-300 ease-in-out overflow-hidden"
-      style={{ width: collapsed ? "4rem" : "18rem" }}
+      style={{ width: collapsed ? "4.5rem" : "17rem" }}
     >
       {/* Header */}
-      <div className="px-3 py-4 flex items-center border-b border-sidebar-border" style={{ minHeight: "4rem" }}>
-        <div className="w-9 h-9 shrink-0 flex items-center justify-center">
-          <img src="/logo.png" alt="Pine logo" className="w-9 h-9 object-contain" />
+      <div className="flex items-center h-16 px-4 shrink-0 border-b border-white/8">
+        <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+          <img src="/logo.png" alt="Pine" className="w-8 h-8 object-contain" />
         </div>
         {!collapsed && (
-          <div className="ml-2.5 flex-1 min-w-0">
-            <div className="font-bold text-[15px] leading-tight text-white">Pine</div>
-            <div className="text-[10px] tracking-[0.15em] opacity-70">BROKER ADMIN</div>
+          <div className="ml-3 flex-1 min-w-0">
+            <div className="text-[15px] font-bold text-white leading-none">Pine</div>
+            <div className="text-[9px] tracking-[0.18em] text-white/40 mt-0.5">BROKER ADMIN</div>
           </div>
         )}
         <button
           onClick={onToggleCollapse}
-          className={`shrink-0 w-7 h-7 flex items-center justify-center rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors ${collapsed ? "mx-auto" : "ml-1"}`}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/8 transition-colors ml-1"
+          title={collapsed ? "Expand" : "Collapse"}
         >
-          {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          {collapsed
+            ? <ChevronRight className="w-3.5 h-3.5" />
+            : <ChevronLeft className="w-3.5 h-3.5" />}
         </button>
       </div>
 
+      {/* Search */}
+      <div className={`shrink-0 border-b border-white/8 ${collapsed ? "flex justify-center py-3" : "px-3 py-3"}`}>
+        {collapsed ? (
+          <button className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-white/8 text-white/35 hover:text-white/60 transition-colors">
+            <Search className="w-4 h-4" />
+          </button>
+        ) : (
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/6 border border-white/8 hover:border-white/15 transition-colors cursor-pointer">
+            <Search className="w-3.5 h-3.5 text-white/35 shrink-0" />
+            <span className="flex-1 text-[13px] text-white/30 select-none">Search</span>
+            <span className="text-[10px] border border-white/15 rounded px-1.5 py-0.5 text-white/25 leading-none">⌘K</span>
+          </div>
+        )}
+      </div>
+
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto scrollbar-hide px-2 py-3 space-y-4">
+      <nav className="flex-1 overflow-y-auto scrollbar-hide py-2">
         {sectionOrder.map((section) => {
           const items = nav.filter((n) => n.section === section);
           if (!items.length) return null;
           return (
-            <div key={section}>
-              {!collapsed && (
-                <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-[0.15em] opacity-60">
-                  {section}
-                </div>
-              )}
-              {collapsed && <div className="my-1 mx-2 border-t border-sidebar-border opacity-30" />}
-              <ul className="space-y-0.5">
+            <div key={section} className="mb-1">
+              <div className={`flex items-center px-4 py-1.5 ${collapsed ? "justify-center" : ""}`}>
+                {collapsed
+                  ? <div className="w-6 border-t border-white/10" />
+                  : <span className="text-[9px] font-semibold tracking-[0.14em] text-white/30">{section}</span>}
+              </div>
+              <ul className="px-2 space-y-px">
                 {items.map((item) => (
                   <NavItem
                     key={item.label}
@@ -318,18 +333,18 @@ function Sidebar({
       </nav>
 
       {/* User footer */}
-      <div className="p-2 border-t border-sidebar-border">
-        <div className={`flex items-center rounded-lg hover:bg-sidebar-accent px-1.5 py-2 ${collapsed ? "justify-center" : "gap-3"}`}>
-          <div className="w-9 h-9 shrink-0 rounded-full bg-white/10 flex items-center justify-center">
-            <CircleUser className="w-5 h-5 text-white" />
+      <div className="shrink-0 border-t border-white/8 p-3">
+        <div className={`flex items-center rounded-xl px-2 py-2 hover:bg-white/6 cursor-pointer transition-colors ${collapsed ? "justify-center" : "gap-2.5"}`}>
+          <div className="w-8 h-8 shrink-0 rounded-full bg-white/12 flex items-center justify-center ring-1 ring-white/10">
+            <CircleUser className="w-4 h-4 text-white/70" />
           </div>
           {!collapsed && (
             <>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-white truncate">Muhammad Irfan</div>
-                <div className="text-[11px] opacity-70 truncate">Super Admin</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-medium text-white leading-none truncate">Muhammad Irfan</div>
+                <div className="text-[9px] tracking-[0.1em] text-white/35 mt-0.5 truncate">SUPER ADMIN</div>
               </div>
-              <ChevronDown className="w-4 h-4 opacity-60 shrink-0" />
+              <ChevronDown className="w-3.5 h-3.5 text-white/25 shrink-0" />
             </>
           )}
         </div>
@@ -346,64 +361,96 @@ function NavItem({
   const Icon = item.icon;
   const hasChildren = !!item.children?.length;
 
+  /* ── Collapsed: icon only ── */
   if (collapsed) {
-    const collapsedCls = `w-full flex items-center justify-center p-2 rounded-lg transition-colors ${
-      active ? "bg-white/10 text-white" : "hover:bg-sidebar-accent opacity-80 hover:opacity-100"
+    const cls = `relative w-full flex items-center justify-center p-2.5 rounded-lg transition-colors ${
+      active ? "bg-white/12" : "hover:bg-white/7"
     }`;
-    const btn = (
-      <div title={item.label} className="relative">
-        {item.href ? (
-          <Link to={item.href} className={collapsedCls}>
-            <Icon className={`w-5 h-5 ${active ? "text-pine-soft" : ""}`} />
-          </Link>
-        ) : (
-          <button className={collapsedCls}>
-            <Icon className={`w-5 h-5 ${active ? "text-pine-soft" : ""}`} />
-          </button>
-        )}
-        {item.badge != null && (
-          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-pine-soft" />
-        )}
-      </div>
+    return (
+      <li>
+        <div className="relative" title={item.label}>
+          {item.href ? (
+            <Link to={item.href} className={cls}>
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine-soft" : "text-white/50"}`} />
+            </Link>
+          ) : (
+            <button className={cls}>
+              <Icon className={`w-[18px] h-[18px] ${active ? "text-pine-soft" : "text-white/50"}`} />
+            </button>
+          )}
+          {item.badge != null && (
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-pine-soft" />
+          )}
+        </div>
+      </li>
     );
-    return <li>{btn}</li>;
   }
 
-  const cls = `w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-    active ? "bg-white/10 text-white font-medium" : "hover:bg-sidebar-accent"
+  /* ── Expanded: icon + label ── */
+  const rowCls = `w-full flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[13px] font-[450] transition-colors ${
+    active
+      ? "bg-white/10 text-white"
+      : "text-white/55 hover:bg-white/6 hover:text-white/85"
   }`;
-  const inner = (
+
+  const rowContent = (icon: React.ReactNode, label: string, badge?: string | number, chevron?: React.ReactNode) => (
     <>
-      <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "opacity-80"}`} />
-      <span className="flex-1 text-left truncate">{item.label}</span>
-      {item.badge != null && (
-        <span className="text-[10px] font-semibold bg-pine-soft/30 text-white px-1.5 py-0.5 rounded">
-          {item.badge}
+      {icon}
+      <span className="flex-1 text-left truncate">{label}</span>
+      {badge != null && (
+        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full leading-none ${
+          active ? "bg-pine-soft/25 text-pine-soft" : "bg-white/10 text-white/50"
+        }`}>
+          {badge}
         </span>
       )}
-      {hasChildren && (isOpen
-        ? <ChevronDown className="w-3.5 h-3.5 opacity-60" />
-        : <ChevronRight className="w-3.5 h-3.5 opacity-60" />)}
+      {chevron}
     </>
   );
+
   return (
     <li>
       {hasChildren ? (
-        <button onClick={onToggle} className={cls}>{inner}</button>
+        <button onClick={onToggle} className={rowCls}>
+          {rowContent(
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "text-white/40"}`} />,
+            item.label,
+            item.badge,
+            isOpen
+              ? <ChevronDown className="w-3 h-3 text-white/30 shrink-0" />
+              : <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />,
+          )}
+        </button>
       ) : item.href ? (
-        <Link to={item.href} className={cls}>{inner}</Link>
+        <Link to={item.href} className={rowCls}>
+          {rowContent(
+            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-pine-soft" : "text-white/40"}`} />,
+            item.label,
+            item.badge,
+          )}
+        </Link>
       ) : (
-        <button className={cls}>{inner}</button>
+        <button className={rowCls}>
+          {rowContent(
+            <Icon className="w-4 h-4 shrink-0 text-white/40" />,
+            item.label,
+            item.badge,
+          )}
+        </button>
       )}
+
+      {/* Children with vertical connector */}
       {hasChildren && isOpen && (
-        <ul className="mt-1 ml-7 border-l border-sidebar-border pl-3 space-y-0.5">
+        <ul className="mt-0.5 ml-[22px] relative">
+          <div className="absolute left-0 top-1 bottom-2 w-px bg-white/10" />
           {item.children!.map((c) => {
-            const childCls = "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] opacity-80 hover:opacity-100 hover:bg-sidebar-accent text-left";
-            const childInner = (
+            const childCls = "relative w-full flex items-center gap-2 pl-5 pr-2 py-[6px] text-[12px] transition-colors text-white/40 hover:text-white/75 hover:bg-white/5 rounded-r-lg text-left";
+            const childContent = (
               <>
+                <div className="absolute left-0 top-1/2 w-3.5 h-px bg-white/10" />
                 <span className="flex-1 truncate">{c.label}</span>
                 {c.badge != null && (
-                  <span className="text-[10px] font-medium bg-sidebar-accent text-white px-1.5 rounded">
+                  <span className="text-[10px] text-white/35 bg-white/8 px-1.5 py-0.5 rounded-full leading-none shrink-0">
                     {c.badge}
                   </span>
                 )}
@@ -411,11 +458,9 @@ function NavItem({
             );
             return (
               <li key={c.label}>
-                {c.href ? (
-                  <Link to={c.href} className={childCls}>{childInner}</Link>
-                ) : (
-                  <button className={childCls}>{childInner}</button>
-                )}
+                {c.href
+                  ? <Link to={c.href} className={childCls}>{childContent}</Link>
+                  : <button className={childCls}>{childContent}</button>}
               </li>
             );
           })}
