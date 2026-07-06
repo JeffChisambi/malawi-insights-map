@@ -36,6 +36,13 @@ const revenueData = Array.from({ length: 14 }, (_, i) => ({
   revenue: Math.round(80 + Math.random() * 60 + i * 6),
 }));
 
+const totalDeposits = revenueData.reduce((s, d) => s + d.deposits, 0);
+const totalWithdrawals = revenueData.reduce((s, d) => s + d.withdrawals, 0);
+const flowData = [
+  { name: "Deposits", value: totalDeposits, color: "#45B369" },
+  { name: "Withdrawals", value: totalWithdrawals, color: "#F87171" },
+];
+
 const allocation = [
   { name: "Equities", value: 62, color: "#45B369" },
   { name: "Bonds", value: 18, color: "#7DD99A" },
@@ -226,20 +233,59 @@ function SystemHealthCard() {
 }
 
 function RevenueCard() {
+  const total = totalDeposits + totalWithdrawals;
+  const depositPct = Math.round((totalDeposits / total) * 100);
+  const withdrawalPct = 100 - depositPct;
   return (
-    <Card title="Deposits, withdrawals & revenue" subtitle="Last 14 days · MWK millions" className="xl:col-span-2">
-      <div className="h-72">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid stroke="oklch(0.92 0.008 150)" vertical={false} />
-            <XAxis dataKey="d" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} />
-            <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "oklch(0.5 0.02 160)" }} />
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.92 0.008 150)", fontSize: 12 }} />
-            <Bar dataKey="deposits" fill="#45B369" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="withdrawals" fill="#7DD99A" radius={[4, 4, 0, 0]} />
-            <Line type="monotone" dataKey="revenue" stroke="oklch(0.72 0.15 75)" strokeWidth={2} dot={false} />
-          </BarChart>
-        </ResponsiveContainer>
+    <Card title="Deposits vs Withdrawals" subtitle="Last 14 days · MWK millions" className="xl:col-span-2">
+      <div className="flex items-center gap-8 h-72">
+        <div className="flex-1 h-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={flowData}
+                cx="50%"
+                cy="50%"
+                innerRadius={72}
+                outerRadius={108}
+                paddingAngle={3}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+              >
+                {flowData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) => [`MWK ${(value / 1000).toFixed(1)}B`, ""]}
+                contentStyle={{ borderRadius: 8, border: "1px solid oklch(0.92 0.008 150)", fontSize: 12 }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-col gap-5 pr-4">
+          {flowData.map((entry) => (
+            <div key={entry.name} className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full shrink-0" style={{ background: entry.color }} />
+                <span className="text-sm text-muted-foreground">{entry.name}</span>
+              </div>
+              <div className="text-xl font-semibold pl-5">
+                MWK {(entry.value / 1000).toFixed(1)}B
+              </div>
+              <div className="text-xs text-muted-foreground pl-5">
+                {entry.name === "Deposits" ? depositPct : withdrawalPct}% of flow
+              </div>
+            </div>
+          ))}
+          <div className="pt-2 border-t border-border pl-5">
+            <div className="text-xs text-muted-foreground">Net flow</div>
+            <div className={`text-base font-semibold ${totalDeposits > totalWithdrawals ? "text-green-600" : "text-red-500"}`}>
+              +MWK {((totalDeposits - totalWithdrawals) / 1000).toFixed(1)}B
+            </div>
+          </div>
+        </div>
       </div>
     </Card>
   );
