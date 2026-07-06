@@ -350,6 +350,18 @@ function NavItem({
   const hasChildren = !!item.children?.length;
   const liRef = useRef<HTMLLIElement>(null);
   const [flyoutTop, setFlyoutTop] = useState<number | null>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelHide = () => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+  };
+  const scheduleHide = () => {
+    cancelHide();
+    hideTimeoutRef.current = setTimeout(() => setFlyoutTop(null), 250);
+  };
 
   /* ── Collapsed: icon only + portal flyout (escapes overflow-y:auto) ── */
   if (collapsed) {
@@ -362,8 +374,8 @@ function NavItem({
           <div
             className="fixed z-[200] pl-2"
             style={{ top: flyoutTop, left: "4.5rem" }}
-            onMouseEnter={() => setFlyoutTop(flyoutTop)}
-            onMouseLeave={() => setFlyoutTop(null)}
+            onMouseEnter={cancelHide}
+            onMouseLeave={scheduleHide}
           >
             <div className="bg-white rounded-xl shadow-xl border border-gray-100 min-w-[192px] overflow-hidden">
               {/* Header */}
@@ -417,10 +429,11 @@ function NavItem({
       <li
         ref={liRef}
         onMouseEnter={() => {
+          cancelHide();
           const rect = liRef.current?.getBoundingClientRect();
           if (rect) setFlyoutTop(rect.top);
         }}
-        onMouseLeave={() => setFlyoutTop(null)}
+        onMouseLeave={scheduleHide}
       >
         <div className="relative">
           {item.href ? (
