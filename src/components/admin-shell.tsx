@@ -276,7 +276,7 @@ function Sidebar({
 }) {
   return (
     <aside
-      className="relative shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border rounded-tr-[28px] transition-all duration-300 ease-in-out overflow-visible"
+      className="relative shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border rounded-tr-[22px] transition-all duration-300 ease-in-out overflow-visible"
       style={{ width: collapsed ? "4.5rem" : "17rem" }}
     >
       {/* Floating collapse toggle — overlaps the top-right corner */}
