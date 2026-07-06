@@ -19,7 +19,7 @@ export type NavGroup = {
 };
 
 export const nav: NavGroup[] = [
-  { section: "OVERVIEW", icon: LayoutDashboard, label: "Executive Dashboard", href: "/" },
+  { section: "OVERVIEW", icon: LayoutDashboard, label: "Overview", href: "/" },
   {
     section: "CLIENTS", icon: Users, label: "User Management", href: "/users", badge: 12,
     children: [
