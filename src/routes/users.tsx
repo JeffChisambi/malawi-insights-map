@@ -155,7 +155,7 @@ function UsersPage() {
         <TableFooter total={filtered.length} />
       </Card>
 
-      {drawerUser && <UserDrawer user={drawerUser} onClose={() => setDrawerUser(null)} />}
+      {drawerUser && <UserModal user={drawerUser} onClose={() => setDrawerUser(null)} />}
     </AdminShell>
   );
 }
@@ -452,12 +452,7 @@ function UsersTable({
               <td className="py-3 text-right font-mono">MWK {MWK(r.aum)}</td>
               <td className="py-3 text-right font-mono text-muted-foreground">MWK {MWK(r.cash)}</td>
               <td className="pr-5 py-3 text-right">
-                <button
-                  onClick={() => onOpenDrawer(r)}
-                  className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center"
-                >
-                  <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                </button>
+                <RowMenu onViewMore={() => onOpenDrawer(r)} />
               </td>
             </tr>
           ))}
@@ -533,9 +528,46 @@ function TableFooter({ total }: { total: number }) {
   );
 }
 
-/* -------------------- drawer -------------------- */
+/* -------------------- row context menu -------------------- */
 
-function UserDrawer({ user, onClose }: { user: UserRow; onClose: () => void }) {
+function RowMenu({ onViewMore }: { onViewMore: () => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-8 h-8 rounded-md hover:bg-muted/60 inline-flex items-center justify-center"
+      >
+        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 z-50 w-40 rounded-xl border border-border bg-card shadow-lg py-1 overflow-hidden">
+          <button
+            onClick={() => { onViewMore(); setOpen(false); }}
+            className="w-full text-left px-3.5 py-2 text-sm text-foreground hover:bg-muted/60 flex items-center gap-2.5 transition-colors"
+          >
+            <Eye className="w-3.5 h-3.5 text-muted-foreground" /> View more
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* -------------------- user modal -------------------- */
+
+function UserModal({ user, onClose }: { user: UserRow; onClose: () => void }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", handler);
@@ -543,11 +575,9 @@ function UserDrawer({ user, onClose }: { user: UserRow; onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]" onClick={onClose} />
-      {/* Panel */}
-      <div className="relative w-full max-w-sm bg-background shadow-2xl flex flex-col overflow-hidden border-l border-border">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-background rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col" style={{ maxHeight: "90vh" }}>
         <UserDetails user={user} onClose={onClose} />
       </div>
     </div>
