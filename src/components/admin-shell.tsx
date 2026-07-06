@@ -347,21 +347,15 @@ function NavItem({
 }) {
   const Icon = item.icon;
   const hasChildren = !!item.children?.length;
-  const [popupOpen, setPopupOpen] = useState(false);
 
   /* ── Collapsed: icon only ── */
   if (collapsed) {
     const cls = `relative w-full flex items-center justify-center p-2.5 rounded-lg transition-colors ${
       active ? "bg-pine/10" : "hover:bg-gray-100"
     }`;
-
     return (
-      <li
-        className="relative"
-        onMouseEnter={() => hasChildren && setPopupOpen(true)}
-        onMouseLeave={() => setPopupOpen(false)}
-      >
-        <div className="relative" title={hasChildren ? undefined : item.label}>
+      <li>
+        <div className="relative" title={item.label}>
           {item.href ? (
             <Link to={item.href} className={cls}>
               <Icon className={`w-[18px] h-[18px] ${active ? "text-pine" : "text-gray-400"}`} />
@@ -375,32 +369,6 @@ function NavItem({
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-pine" />
           )}
         </div>
-
-        {/* Floating children popup */}
-        {hasChildren && popupOpen && (
-          <div className="absolute left-full top-0 ml-2 z-50 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[170px]">
-            {item.children!.map((c) => {
-              const childCls = "w-full flex items-center gap-2 px-4 py-2.5 text-[13px] transition-colors text-gray-500 hover:bg-gray-50 hover:text-gray-800 text-left";
-              const inner = (
-                <>
-                  <span className="flex-1 truncate">{c.label}</span>
-                  {c.badge != null && (
-                    <span className="text-[10px] bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded-full leading-none shrink-0">
-                      {c.badge}
-                    </span>
-                  )}
-                </>
-              );
-              return (
-                <div key={c.label}>
-                  {c.href
-                    ? <Link to={c.href} className={childCls}>{inner}</Link>
-                    : <button className={childCls}>{inner}</button>}
-                </div>
-              );
-            })}
-          </div>
-        )}
       </li>
     );
   }
