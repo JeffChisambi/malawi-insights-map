@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Users, CandlestickChart, Briefcase, Headphones, Scale,
   TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Clock,
-  CheckCircle2, XCircle, Server, Cpu, HardDrive, Wifi, Coins,
-  Landmark, UserCheck, UserPlus, ShieldAlert, Zap, Activity, DatabaseBackup,
+  XCircle, Server, Cpu, HardDrive, Wifi, Coins,
+  Landmark, UserCheck, UserPlus, ShieldAlert, Activity, DatabaseBackup,
 } from "lucide-react";
 import {
   AreaChart, Area, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid,
@@ -58,22 +58,6 @@ const allocation = [
   { name: "Funds", value: 8, color: "oklch(0.62 0.13 230)" },
 ];
 
-const approvals = [
-  { type: "KYC", who: "Chikondi Banda", detail: "Tier 2 upgrade", time: "2m", severity: "warn" },
-  { type: "Withdrawal", who: "Grace Phiri", detail: "MWK 4,200,000 → Airtel Money", time: "6m", severity: "high" },
-  { type: "Manual adj.", who: "Ledger #A-4821", detail: "Correction request", time: "12m", severity: "warn" },
-  { type: "Corp action", who: "TNM plc", detail: "Dividend distribution", time: "1h", severity: "info" },
-  { type: "Refund", who: "Mercy Kaunda", detail: "Failed deposit refund", time: "2h", severity: "info" },
-  { type: "KYC", who: "James Nyirenda", detail: "Face verification review", time: "3h", severity: "warn" },
-];
-
-const alerts = [
-  { icon: ShieldAlert, title: "AML velocity threshold breached", meta: "Account #U-90312 · 4 deposits in 12m", time: "4m", tone: "rose" },
-  { icon: XCircle, title: "Payment gateway PesaPal degraded", meta: "Error rate 6.4% · last 15m", time: "9m", tone: "amber" },
-  { icon: Zap, title: "Order execution latency spike", meta: "p95 = 812ms on MSE feed", time: "22m", tone: "amber" },
-  { icon: CheckCircle2, title: "Market open completed", meta: "MSE session started nominally", time: "1h", tone: "pine" },
-];
-
 const health = [
   { icon: Server, label: "API", value: "99.98%", tone: "pine" },
   { icon: DatabaseBackup, label: "Database", value: "Healthy", tone: "pine" },
@@ -91,10 +75,6 @@ function Dashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <VolumeCard />
         <RevenueCard />
-      </div>
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <ApprovalsCard />
-        <AlertsCard />
       </div>
     </AdminShell>
   );
@@ -366,72 +346,6 @@ function AllocationCard() {
           ))}
         </div>
       </div>
-    </Card>
-  );
-}
-
-function ApprovalsCard() {
-  return (
-    <Card
-      title="Pending approvals"
-      subtitle="Actions waiting on admin review"
-      className="xl:col-span-2"
-      action={<button className="text-xs text-pine font-medium hover:underline">View queue →</button>}
-    >
-      <div className="divide-y divide-border">
-        {approvals.map((a, i) => {
-          const tone =
-            a.severity === "high" ? "bg-rose/10 text-rose" :
-            a.severity === "warn" ? "bg-amber/10 text-amber" : "bg-pine/10 text-pine";
-          return (
-            <div key={i} className="py-3 flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-semibold ${tone}`}>
-                {a.type.slice(0, 2).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium truncate">{a.who}</div>
-                <div className="text-xs text-muted-foreground truncate">{a.type} · {a.detail}</div>
-              </div>
-              <div className="text-[11px] text-muted-foreground">{a.time} ago</div>
-              <div className="flex items-center gap-1">
-                <button className="text-xs px-2.5 py-1 rounded-md bg-pine text-primary-foreground hover:opacity-95">
-                  Approve
-                </button>
-                <button className="text-xs px-2.5 py-1 rounded-md border border-border hover:bg-muted/40">
-                  Review
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </Card>
-  );
-}
-
-function AlertsCard() {
-  return (
-    <Card title="Critical alerts" subtitle="Last 6 hours">
-      <ul className="space-y-3">
-        {alerts.map((a, i) => {
-          const Icon = a.icon;
-          const tone =
-            a.tone === "rose" ? "bg-rose/10 text-rose" :
-            a.tone === "amber" ? "bg-amber/10 text-amber" : "bg-pine/10 text-pine";
-          return (
-            <li key={i} className="flex gap-3">
-              <div className={`w-9 h-9 shrink-0 rounded-lg flex items-center justify-center ${tone}`}>
-                <Icon className="w-4 h-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium leading-tight">{a.title}</div>
-                <div className="text-xs text-muted-foreground mt-0.5 truncate">{a.meta}</div>
-              </div>
-              <div className="text-[11px] text-muted-foreground shrink-0">{a.time}</div>
-            </li>
-          );
-        })}
-      </ul>
     </Card>
   );
 }
