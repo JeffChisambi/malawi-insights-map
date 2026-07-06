@@ -261,8 +261,8 @@ function Sidebar({
   return (
     <aside className="w-72 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border">
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
-        <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
-          <Trees className="w-5 h-5 text-pine-soft" />
+        <div className="w-9 h-9 flex items-center justify-center">
+          <img src="/logo.png" alt="Pine logo" className="w-9 h-9 object-contain" />
         </div>
         <div>
           <div className="font-bold text-[15px] leading-tight text-white">Pine</div>
