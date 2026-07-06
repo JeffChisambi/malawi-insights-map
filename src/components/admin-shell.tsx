@@ -548,14 +548,20 @@ function NavItem({
 }
 
 function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem("pine-theme");
-    if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [dark, setDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    const stored = localStorage.getItem("pine-theme");
+    const initialDark = stored
+      ? stored === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setDark(initialDark);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const root = document.documentElement;
     if (dark) {
       root.classList.add("dark");
@@ -564,7 +570,7 @@ function Topbar({ eyebrow, title }: { eyebrow: string; title: string }) {
       root.classList.remove("dark");
       localStorage.setItem("pine-theme", "light");
     }
-  }, [dark]);
+  }, [dark, mounted]);
 
   return (
     <header className="flex items-center gap-4 px-8 py-4 bg-background sticky top-0 z-10">
