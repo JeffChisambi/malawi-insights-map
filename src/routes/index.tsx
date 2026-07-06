@@ -140,7 +140,11 @@ function KpiGrid() {
         right={{ label: "Withdrawals today", value: "MWK 942M", delta: "-3.6%", trend: "down", sub: "1,984 txns" }}
       />
       <Kpi icon={Landmark} label="AUM" value="MWK 812.4B" delta="+1.8%" trend="up" sub="30-day change" />
-      <Kpi icon={ShieldAlert} label="Risk alerts" value="7" delta="review" trend="flat" sub="AML · velocity · IP" />
+      <KpiDouble
+        icon={ShieldAlert}
+        left={{ label: "Pending approvals", value: "46", delta: "urgent", trend: "flat", sub: "12 KYC · 9 payouts" }}
+        right={{ label: "Risk alerts", value: "7", delta: "review", trend: "flat", sub: "AML · velocity · IP" }}
+      />
     </div>
   );
 }
