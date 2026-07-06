@@ -183,17 +183,15 @@ function KycPage() {
           })}
         </div>
         <FilterTabsDropdown activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="ml-auto flex items-center gap-2 py-2">
+          <SortPill sortBy={sortBy} setSortBy={setSortBy} />
+          <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border text-sm text-muted-foreground hover:bg-muted/40">
+            <Download className="w-3.5 h-3.5" /> Export
+          </button>
+        </div>
       </div>
 
       <Card className="!p-0 overflow-hidden">
-          {/* Toolbar */}
-          <div className="flex items-center gap-2 px-5 py-3 border-b border-border">
-            <SortPill sortBy={sortBy} setSortBy={setSortBy} />
-            <button className="ml-auto flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border text-sm text-muted-foreground hover:bg-muted/40">
-              <Download className="w-3.5 h-3.5" /> Export
-            </button>
-          </div>
-
           <KycTable rows={rows} onSelect={setSelected} showDetailColumns={activeTab === "all"} />
 
           <div className="flex items-center justify-between px-5 py-3 border-t border-border text-xs text-muted-foreground">
