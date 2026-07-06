@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Users, CandlestickChart, Briefcase, Headphones, Scale,
   TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Clock,
-  CheckCircle2, XCircle, Server, Cpu, HardDrive, Wifi, DollarSign, Coins,
+  CheckCircle2, XCircle, Server, Cpu, HardDrive, Wifi, Coins,
   Landmark, UserCheck, UserPlus, ShieldAlert, Zap, Activity, DatabaseBackup,
 } from "lucide-react";
 import {
@@ -11,6 +11,7 @@ import {
   RadialBarChart, RadialBar, PolarAngleAxis,
 } from "recharts";
 import { AdminShell, Card } from "@/components/admin-shell";
+import { RevenueIcon } from "@/components/icons/revenue-icon";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -131,7 +132,7 @@ function KpiGrid() {
       />
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
       <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
-      <Kpi icon={DollarSign} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
+      <Kpi icon={RevenueIcon} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
       <KpiDouble
         icon={ArrowLeftRight}
         left={{ label: "Deposits today", value: "MWK 1.42B", delta: "+8.2%", trend: "up", sub: "3,102 txns" }}
