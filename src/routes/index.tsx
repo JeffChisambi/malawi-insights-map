@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { AdminShell, Card } from "@/components/admin-shell";
 import { RevenueIcon } from "@/components/icons/revenue-icon";
+import { VolumeIcon } from "@/components/icons/volume-icon";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -131,7 +132,7 @@ function KpiGrid() {
         right={{ label: "New signups (24h)", value: "1,284", delta: "+6.1%", trend: "up", sub: "812 verified" }}
       />
       <Kpi icon={Coins} label="Total cash held" value="MWK 214.6B" delta="-0.3%" trend="down" sub="Reserved 42.1B" />
-      <Kpi icon={CandlestickChart} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
+      <Kpi icon={VolumeIcon} label="Volume (today)" value="MWK 18.9B" delta="+12.7%" trend="up" sub="14,208 trades" />
       <Kpi icon={RevenueIcon} label="Revenue (today)" value="MWK 92.4M" delta="+4.9%" trend="up" sub="Fees + spread" />
       <KpiDouble
         icon={ArrowLeftRight}
