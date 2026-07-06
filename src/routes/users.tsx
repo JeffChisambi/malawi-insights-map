@@ -423,7 +423,6 @@ function UsersTable({
                   <Avatar name={r.name} />
                   <div className="min-w-0">
                     <div className="font-medium truncate">{r.name}</div>
-                    <div className="text-xs text-muted-foreground truncate">{r.id}</div>
                   </div>
                 </div>
               </td>
