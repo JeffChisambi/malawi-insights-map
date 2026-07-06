@@ -269,7 +269,7 @@ function Sidebar({
       {/* Floating collapse toggle — overlaps the top-right corner */}
       <button
         onClick={onToggleCollapse}
-        className="absolute top-[4.5rem] -right-4 z-20 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
+        className="absolute top-3 -right-4 z-20 w-8 h-8 rounded-full bg-gray-100 border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
         title={collapsed ? "Expand" : "Collapse"}
       >
         {collapsed
